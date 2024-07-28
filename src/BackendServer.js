@@ -1,0 +1,1 @@
+export const backendServer = `https://xplore-backend-x065.onrender.com`;

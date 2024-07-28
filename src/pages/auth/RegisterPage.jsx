@@ -2,7 +2,7 @@ import { json, Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 
 import XSvg from "../../components/svgs/X";
-
+import { backendServer } from "../../BackendServer";
 import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
@@ -29,7 +29,7 @@ const RegisterPage = () => {
 	} = useMutation({
 		mutationFn: async ({ email, username, fullName, password }) => {
 			try {
-				const res = await fetch("/api/v1/auth/signup", {
+				const res = await fetch(`backendServer/api/v1/auth/signup`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
