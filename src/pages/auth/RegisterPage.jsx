@@ -38,9 +38,11 @@ const RegisterPage = () => {
 				});
 
 				const resData = await res.json();
+				console.log("Resp",res)
 				if (!res.ok)
 					throw new Error(resData.message || "Failed to create account");
 				return resData;
+				
 			} catch (error) {
 				throw error;
 			}
