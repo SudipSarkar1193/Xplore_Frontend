@@ -11,12 +11,11 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
 	plugins: [react()],
 	server: {
-		port: process.env.FRONTEND_PORT,
-		// proxy: {
-		// 	"/api": {
-		// 		target: `https://xplore-backend-x065.onrender.com`,
-		// 		changeOrigin: true,
-		// 	},
-		// },
+		proxy: {
+			"/api": {
+				target: `https://xplore-backend-x065.onrender.com`,
+				changeOrigin: true,
+			},
+		},
 	},
 });
