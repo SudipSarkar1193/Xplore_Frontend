@@ -29,7 +29,10 @@ const RegisterPage = () => {
 	} = useMutation({
 		mutationFn: async ({ email, username, fullName, password }) => {
 			try {
-				const res = await fetch(`${backendServer}/api/v1/auth/signup`, {
+
+				console.log("18797",email, username, fullName, password)
+
+				const res = await fetch(`/api/v1/auth/signup`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
