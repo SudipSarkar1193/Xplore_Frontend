@@ -69,14 +69,17 @@ const Post = ({ post }) => {
 	const { mutate: commentPost, isPending: isCommenting } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`${backendServer}/api/v1/posts/comment/${post._id}`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					credentials: "include",
-					body: JSON.stringify({ text: comment }),
-				});
+				const res = await fetch(
+					`${backendServer}/api/v1/posts/comment/${post._id}`,
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						credentials: "include",
+						body: JSON.stringify({ text: comment }),
+					}
+				);
 				const data = await res.json();
 
 				if (!res.ok) {
@@ -116,10 +119,13 @@ const Post = ({ post }) => {
 	const { mutate: like, isPending: isLiking } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`${backendServer}/api/v1/posts/like/${post._id}`, {
-					method: "POST",
-					credentials: "include",
-				});
+				const res = await fetch(
+					`${backendServer}/api/v1/posts/like/${post._id}`,
+					{
+						method: "POST",
+						credentials: "include",
+					}
+				);
 
 				if (!res.ok) {
 					throw new Error("Error liking the post");
@@ -173,12 +179,7 @@ const Post = ({ post }) => {
 						to={`/profile/${postOwner?.username}`}
 						className="w-8 rounded-full overflow-hidden"
 					>
-						<img
-							src={
-								postOwner?.profileImg ||
-								"./avatar-placeholder.png"
-							}
-						/>
+						<img src={postOwner?.profileImg || "./avatar-placeholder.png"} />
 					</Link>
 				</div>
 				<div className="flex flex-col flex-1 z-10">
@@ -198,7 +199,9 @@ const Post = ({ post }) => {
 								<FaTrash
 									className="cursor-pointer hover:text-red-500 active:text-red-600"
 									onClick={() =>
-										document.getElementById(`my_delete_modal_${post._id}`).showModal()
+										document
+											.getElementById(`my_delete_modal_${post._id}`)
+											.showModal()
 									}
 								/>
 							</span>
@@ -208,7 +211,7 @@ const Post = ({ post }) => {
 					</div>
 
 					<div className="flex flex-col gap-3 overflow-hidden">
-						<span>{post.text}</span>
+						<pre>{post.text}</pre>
 						{post.img && (
 							<img
 								src={post.img}
@@ -267,7 +270,9 @@ const Post = ({ post }) => {
 															@{comment.authorDetails?.username}
 														</span>
 													</div>
-													<div className="text-sm">{comment.text}</div>
+													<div className="text-sm">
+														<pre>{comment.text}</pre>
+													</div>
 												</div>
 											</div>
 										))}
@@ -329,12 +334,18 @@ const Post = ({ post }) => {
 					</div>
 				</div>
 
-				<dialog id={`my_delete_modal_${post._id}`} className="modal modal-bottom sm:modal-middle">
+				<dialog
+					id={`my_delete_modal_${post._id}`}
+					className="modal modal-bottom sm:modal-middle"
+				>
 					<div className="modal-box">
 						<h3 className="font-bold text-lg">Confirm !</h3>
 						<p className="py-4">Do you really want to delete the post ?</p>
 						<div className="modal-action-custom">
-							<button className="btn-custom-2 bg-red-600" onClick={handleDeletePost}>
+							<button
+								className="btn-custom-2 bg-red-600"
+								onClick={handleDeletePost}
+							>
 								Yes
 							</button>
 							<form method="dialog">
