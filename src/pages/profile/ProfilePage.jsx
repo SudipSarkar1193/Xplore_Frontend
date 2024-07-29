@@ -27,7 +27,7 @@ const ProfilePage = () => {
 	const profileImgRef = useRef(null);
 
 	let { username } = useParams();
-
+	console.log("username", username);
 	const queryClient = useQueryClient();
 	const { followUnfollow, isPending: isPendingFollow } = useFollow();
 
