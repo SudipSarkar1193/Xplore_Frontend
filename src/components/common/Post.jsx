@@ -211,7 +211,7 @@ const Post = ({ post }) => {
 					</div>
 
 					<div className="flex flex-col gap-3 overflow-hidden">
-						<pre>{post.text}</pre>
+						<pre className="preformatted text-white">{post.text}</pre>
 						{post.img && (
 							<img
 								src={post.img}
@@ -271,7 +271,7 @@ const Post = ({ post }) => {
 														</span>
 													</div>
 													<div className="text-sm">
-														<pre>{comment.text}</pre>
+														<pre className="preformatted">{comment.text}</pre>
 													</div>
 												</div>
 											</div>

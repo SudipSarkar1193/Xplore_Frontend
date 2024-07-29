@@ -31,3 +31,10 @@
   position: sticky;
   top: 0;
 }
+
+.preformatted {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  background-color: rgb(51, 40, 40);
+}
