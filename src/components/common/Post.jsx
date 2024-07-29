@@ -171,7 +171,7 @@ const Post = ({ post }) => {
 		(comment) => Object.keys(comment).length > 0
 	);
 
-	console.log("postOwner",postOwner);
+	
 
 	return (
 		<div className="overflow-y-hidden no-scrollbar pr-4">

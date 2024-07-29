@@ -1,7 +1,7 @@
 import { json, Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 
-import XSvg from "../../../src/components/svgs/X.jsx"
+import XSvg from "../../../src/components/svgs/X.jsx";
 import { backendServer } from "../../BackendServer.js";
 import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
@@ -10,6 +10,7 @@ import { MdDriveFileRenameOutline } from "react-icons/md";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { toast } from "react-hot-toast";
+
 
 const RegisterPage = () => {
 	const [isRegistered, setIsRegistered] = useState(false);
@@ -21,7 +22,7 @@ const RegisterPage = () => {
 		password: "",
 	});
 
-	console.log("backendServer", "backendServer", backendServer);
+	
 
 	const {
 		mutate: signup,
@@ -31,7 +32,7 @@ const RegisterPage = () => {
 	} = useMutation({
 		mutationFn: async ({ email, username, fullName, password }) => {
 			try {
-				console.log("18797", email, username, fullName, password);
+				
 
 				const res = await fetch(`${backendServer}/api/v1/auth/signup`, {
 					method: "POST",
@@ -43,16 +44,26 @@ const RegisterPage = () => {
 				});
 
 				const resData = await res.json();
-				console.log("Resp", res);
+
 				if (!res.ok)
 					throw new Error(resData.message || "Failed to create account");
-				return resData;
+
+				return { resData, username };
 			} catch (error) {
 				throw error;
 			}
 		},
-		onSuccess: (resData) => {
+		onSuccess: ({ resData, username }) => {
 			toast.success(resData.message);
+			if (resData.data.username !== username) {
+				toast.success(`Your username : ${resData.data.username}`, {
+					duration: 8000,
+				});
+				toast.success(`Only letters, numbers, and underscores are allowed`, {
+					duration: 5000,
+				});
+			}
+
 			setIsRegistered(true);
 		},
 		onError: (error) => {
@@ -77,7 +88,6 @@ const RegisterPage = () => {
 		<div className="max-w-screen-xl mx-auto flex h-screen px-10">
 			<div className="flex-1 hidden lg:flex items-center  justify-center">
 				<XSvg className=" lg:w-2/3 fill-white" />
-				
 			</div>
 			<div className="flex-1 flex flex-col justify-center items-center">
 				<form
@@ -134,10 +144,11 @@ const RegisterPage = () => {
 						/>
 					</label>
 					<p className="text-white text-md text-pretty text-center">
-						You can add your Profile Picture and Cover Image later after you sign in😀
+						You can add your Profile Picture and Cover Image later after you
+						sign in😀
 					</p>
 					<button className="btn rounded-full btn-primary text-white">
-						{isPending ? "Loader..." : "Sign up"}
+						{isPending ? "Signing up..." : "Sign up"}
 					</button>
 					{isError && <p className="text-red-500">Something went wrong</p>}
 				</form>
