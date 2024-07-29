@@ -198,7 +198,7 @@ const Post = ({ post }) => {
 								<FaTrash
 									className="cursor-pointer hover:text-red-500 active:text-red-600"
 									onClick={() =>
-										document.getElementById("my_modal_delete").showModal()
+										document.getElementById(`my_delete_modal_${post._id}`).showModal()
 									}
 								/>
 							</span>
@@ -329,7 +329,7 @@ const Post = ({ post }) => {
 					</div>
 				</div>
 
-				<dialog id="my_modal_delete" className="modal modal-bottom sm:modal-middle">
+				<dialog id={`my_delete_modal_${post._id}`} className="modal modal-bottom sm:modal-middle">
 					<div className="modal-box">
 						<h3 className="font-bold text-lg">Confirm !</h3>
 						<p className="py-4">Do you really want to delete the post ?</p>
