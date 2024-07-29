@@ -39,20 +39,11 @@
   
 }
 
-.kalam-light {
-  font-family: "Kalam", cursive;
-  font-weight: 300;
+.open-sans-medium {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
   font-style: normal;
-}
-
-.kalam-regular {
-  font-family: "Kalam", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.kalam-bold {
-  font-family: "Kalam", cursive;
-  font-weight: 700;
-  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
 }
