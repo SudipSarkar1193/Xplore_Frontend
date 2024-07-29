@@ -47,3 +47,8 @@
   font-variation-settings:
     "wdth" 100;
 }
+
+.post{
+  max-height: 90vh;
+ 
+}

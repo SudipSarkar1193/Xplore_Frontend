@@ -71,7 +71,7 @@ const Sidebar = () => {
 
 
 				{/* Mobile layout */}
-				<div className="fixed bottom-0 w-full md:hidden bg-black border-t border-gray-700 flex justify-around items-center py-2 z-50">
+				<div className="fixed bottom-0 w-full md:hidden bg-black border-t border-gray-700 flex justify-around items-center py-2 z-50 bg-red-500 ">
 					<Link
 						to="/"
 						className="flex gap-3 items-center hover:bg-secondary transition-all rounded-full py-2 px-4"
