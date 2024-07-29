@@ -8,6 +8,7 @@ import { FaHeart } from "react-icons/fa6";
 import { FaComment } from "react-icons/fa";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner";
+import { backendServer } from "../../BackendServer";
 
 const NotificationPage = () => {
 	const queryClient = useQueryClient();
@@ -15,8 +16,9 @@ const NotificationPage = () => {
 		queryKey: ["notifications"],
 		queryFn: async () => {
 			try {
-				const res = await fetch("/api/v1/notifications", {
+				const res = await fetch(`${backendServer}/api/v1/notifications`, {
 					method: "GET",
+					credentials: "include",
 				});
 				const data = await res.json();
 				if (!res.ok) throw new Error(data.error || "Something went wrong");
@@ -30,8 +32,9 @@ const NotificationPage = () => {
 	const { mutate: deleteNotifications } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch("/api/v1/notifications", {
+				const res = await fetch(`${backendServer}/api/v1/notifications`, {
 					method: "DELETE",
+					credentials: "include",
 				});
 				const data = await res.json();
 

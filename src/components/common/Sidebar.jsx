@@ -9,6 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { IoIosPersonAdd } from "react-icons/io";
 import RightPanel from "./RightPanel";
+import { backendServer } from "../../BackendServer";
 // import { IoMenu } from "react-icons/io5";
 
 const Sidebar = () => {
@@ -24,11 +25,12 @@ const Sidebar = () => {
 	} = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch("/api/v1/auth/logout", {
+				const res = await fetch(`${backendServer}/api/v1/auth/logout`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
+					credentials: "include",
 				});
 
 				const jsonRes = await res.json();
@@ -53,7 +55,7 @@ const Sidebar = () => {
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
 	return (
-		<div className="z-50 bg-red">
+		<div>
 			<dialog id="my_modal_2" className="modal">
 				<div className="modal-box">
 					<form method="dialog">
@@ -65,9 +67,11 @@ const Sidebar = () => {
 					<RightPanel con={true} />
 				</div>
 			</dialog>
-			<div className="md:flex md:flex-[2_2_0] md:w-18 md:max-w-52 ">
+			<div className=" md:flex md:flex-[2_2_0] md:w-18 md:max-w-52 h-full">
+
+
 				{/* Mobile layout */}
-				<div className="fixed bottom-0 left-0 w-full md:hidden bg-black border-t border-gray-700 flex justify-around items-center py-2">
+				<div className="fixed bottom-0 w-full md:hidden bg-black border-t border-gray-700 flex justify-around items-center py-2 z-50">
 					<Link
 						to="/"
 						className="flex gap-3 items-center hover:bg-secondary transition-all rounded-full py-2 px-4"
@@ -106,8 +110,9 @@ const Sidebar = () => {
 						</div>
 					)}
 				</div>
-
-				<div className="sticky top-0 left-0 h-screen lg:flex flex-col border-r border-gray-700 w-20 md:w-full hidden md:flex">
+				
+				{/* destop layout */}
+				<div className="sticky top-0 h-screen  lg:flex lg:items-center flex-col border-r border-gray-700  hidden md:flex  ">
 					<Link to="/" className="flex justify-center md:justify-start">
 						<XSvg className="px-2 w-12 h-12 rounded-full fill-white hover:bg-secondary" />
 					</Link>
@@ -165,7 +170,7 @@ const Sidebar = () => {
 					{authUser && (
 						<Link
 							to={`/profile/${authUser?.username}`}
-							className="mt-auto mb-10 flex gap-2 items-start transition-all duration-300 hover:bg-secondary py-2 px-4 rounded-full"
+							className="mt-auto mb-10 flex gap-2 items-start transition-all duration-300 hover:bg-secondary py-2 px-4 rounded-full  "
 						>
 							<div className="avatar hidden md:inline-flex">
 								<div className="w-8 rounded-full">

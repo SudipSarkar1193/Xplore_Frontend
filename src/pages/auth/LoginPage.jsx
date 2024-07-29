@@ -7,9 +7,10 @@ import { MdDriveFileRenameOutline } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { set } from "mongoose";
-import { json, Link } from "react-router-dom";
+import { json, Link, Navigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { backendServer } from "../../BackendServer";
 
 const LoginPage = () => {
 	const [formData, setFormData] = useState({
@@ -35,12 +36,16 @@ const LoginPage = () => {
 				} else {
 					username = usernameOrEmail;
 				}
-
-				const res = await fetch("/api/v1/auth/login", {
+				console.log(
+					"`${backendServer}/api/v1/auth/login`",
+					`${backendServer}/api/v1/auth/login`
+				);
+				const res = await fetch(`${backendServer}/api/v1/auth/login`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
+					credentials: "include",
 					body: JSON.stringify({ username, email, password }),
 				});
 
@@ -55,9 +60,10 @@ const LoginPage = () => {
 			}
 		},
 		onSuccess: (jsonRes) => {
-			toast.success(jsonRes.message)
+			toast.success(jsonRes.message);
 			queryClient.invalidateQueries({ queryKey: ["userAuth"] });
 			queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] });
+			return <Navigate to="/" />;
 		},
 		onError: (error) => {
 			console.error(error.message);
@@ -135,6 +141,7 @@ const LoginPage = () => {
 				</form>
 
 				<div className="flex flex-col lg:w-2/3  lg:bg-red gap-2 mt-4">
+				
 					<p className="text-white text-lg">Don't have an account ?</p>
 					<Link to="/signup">
 						<button className="btn rounded-full btn-primary text-white btn-outline w-full">

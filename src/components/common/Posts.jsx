@@ -3,11 +3,12 @@ import PostSkeleton from "../skeletons/PostSkeleton.jsx";
 import { POSTS } from "../../utils/db/dummy";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { backendServer } from "../../BackendServer.js";
 
 const Posts = ({ feedType, userId }) => {
 	// const isLoading = false;
 	const endPoint = () => {
-		const r = "/api/v1/posts";
+		const r = `${backendServer}/api/v1/posts`;
 
 		switch (feedType) {
 			case "forYou":
@@ -31,6 +32,7 @@ const Posts = ({ feedType, userId }) => {
 					headers: {
 						"Content-Type": "application/json",
 					},
+					credentials: "include",
 				});
 
 				const jsonRes = await res.json();

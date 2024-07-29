@@ -1,8 +1,8 @@
 import { json, Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 
-import XSvg from "../../components/svgs/X";
-import { backendServer } from "../../BackendServer";
+import XSvg from "../../../src/components/svgs/X.jsx"
+import { backendServer } from "../../BackendServer.js";
 import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
@@ -21,6 +21,8 @@ const RegisterPage = () => {
 		password: "",
 	});
 
+	console.log("backendServer", "backendServer", backendServer);
+
 	const {
 		mutate: signup,
 		isError,
@@ -29,23 +31,22 @@ const RegisterPage = () => {
 	} = useMutation({
 		mutationFn: async ({ email, username, fullName, password }) => {
 			try {
+				console.log("18797", email, username, fullName, password);
 
-				console.log("18797",email, username, fullName, password)
-
-				const res = await fetch(`/api/v1/auth/signup`, {
+				const res = await fetch(`${backendServer}/api/v1/auth/signup`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
+					credentials: "include",
 					body: JSON.stringify({ fullName, username, email, password }),
 				});
 
 				const resData = await res.json();
-				console.log("Resp",res)
+				console.log("Resp", res);
 				if (!res.ok)
 					throw new Error(resData.message || "Failed to create account");
 				return resData;
-				
 			} catch (error) {
 				throw error;
 			}
@@ -76,6 +77,7 @@ const RegisterPage = () => {
 		<div className="max-w-screen-xl mx-auto flex h-screen px-10">
 			<div className="flex-1 hidden lg:flex items-center  justify-center">
 				<XSvg className=" lg:w-2/3 fill-white" />
+				
 			</div>
 			<div className="flex-1 flex flex-col justify-center items-center">
 				<form
@@ -131,6 +133,9 @@ const RegisterPage = () => {
 							value={formData.password}
 						/>
 					</label>
+					<p className="text-white text-md text-pretty text-center">
+						You can add your Profile Picture and Cover Image later after you sign in😀
+					</p>
 					<button className="btn rounded-full btn-primary text-white">
 						{isPending ? "Loader..." : "Sign up"}
 					</button>

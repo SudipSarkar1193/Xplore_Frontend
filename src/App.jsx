@@ -11,6 +11,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import './index.css'
+import { backendServer } from "./BackendServer";
 
 // import "./index.css";
 
@@ -19,11 +20,12 @@ const App = () => {
 		queryKey: ["userAuth"],
 		queryFn: async () => {
 			try {
-				const res = await fetch("/api/v1/auth/me", {
+				const res = await fetch(`${backendServer}/api/v1/auth/me`, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
 					},
+					credentials: "include",
 				});
 
 				const jsonRes = await res.json();
@@ -49,7 +51,7 @@ const App = () => {
 	}
 
 	return (
-		<div className="flex max-w-6xl mx-auto ">
+		<div className="flex justify-between max-w-6xl mx-auto ">
 			{authUser && <Sidebar />}
 
 			<Routes>

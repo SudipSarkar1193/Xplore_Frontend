@@ -9,6 +9,7 @@ import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import LoadingSpinner from "./LoadingSpinner";
 import { timeAgo } from "../../utils/timeAgo.js";
+import { backendServer } from "../../BackendServer.js";
 
 const Post = ({ post }) => {
 	const [comment, setComment] = useState("");
@@ -32,8 +33,9 @@ const Post = ({ post }) => {
 	} = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`/api/v1/posts/${post._id}`, {
+				const res = await fetch(`${backendServer}/api/v1/posts/${post._id}`, {
 					method: "DELETE",
+					credentials: "include",
 				});
 
 				const jsonRes = await res.json();
@@ -67,11 +69,12 @@ const Post = ({ post }) => {
 	const { mutate: commentPost, isPending: isCommenting } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`/api/v1/posts/comment/${post._id}`, {
+				const res = await fetch(`${backendServer}/api/v1/posts/comment/${post._id}`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
+					credentials: "include",
 					body: JSON.stringify({ text: comment }),
 				});
 				const data = await res.json();
@@ -113,8 +116,9 @@ const Post = ({ post }) => {
 	const { mutate: like, isPending: isLiking } = useMutation({
 		mutationFn: async () => {
 			try {
-				const res = await fetch(`/api/v1/posts/like/${post._id}`, {
+				const res = await fetch(`${backendServer}/api/v1/posts/like/${post._id}`, {
 					method: "POST",
+					credentials: "include",
 				});
 
 				if (!res.ok) {
@@ -162,8 +166,8 @@ const Post = ({ post }) => {
 	);
 
 	return (
-		<div className="overflow-y-hidden no-scrollbar">
-			<div className="flex gap-2 items-start p-4 border-b border-gray-700 overflow-y-hidden no-scrollbar">
+		<div className="overflow-y-hidden no-scrollbar pr-4">
+			<div className="flex gap-2 items-start p-4 border-b border-gray-700 overflow-y-hidden">
 				<div className="avatar">
 					<Link
 						to={`/profile/${postOwner?.username}`}
