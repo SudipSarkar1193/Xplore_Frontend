@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/home/HomePage";
-import RegisterPage from "./pages/auth/RegisterPage";
-import LoginPage from "./pages/auth/LoginPage";
 import Sidebar from "./components/common/Sidebar";
 import RightPanel from "./components/common/RightPanel";
-import NotificationPage from "./pages/notification/NotificationPage";
-import ProfilePage from "./pages/profile/ProfilePage";
 import { toast, Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import './index.css'
 import { backendServer } from "./BackendServer";
 
-// import "./index.css";
+const HomePage = lazy(() => import("./pages/home/HomePage"));
+const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
+const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
+const NotificationPage = lazy(() => import("./pages/notification/NotificationPage"));
+const ProfilePage = lazy(() => import("./pages/profile/ProfilePage"));
+
 
 const App = () => {
 	const { data: authUser, isLoading } = useQuery({
@@ -51,36 +51,38 @@ const App = () => {
 	}
 
 	return (
-		<div className="flex justify-between max-w-6xl mx-auto ">
-			{authUser && <Sidebar />}
+        <div className="flex justify-between max-w-6xl mx-auto">
+            {authUser && <Sidebar />}
 
-			<Routes>
-				<Route
-					path="/"
-					element={authUser ? <HomePage /> : <Navigate to="/login" />}
-				></Route>
-				<Route
-					path="/signup"
-					element={!authUser ? <RegisterPage /> : <Navigate to="/" />}
-				></Route>
-				<Route
-					path="/login"
-					element={!authUser ? <LoginPage /> : <Navigate to="/" />}
-				></Route>
-				<Route
-					path="/notifications"
-					element={authUser ? <NotificationPage /> : <Navigate to="/login" />}
-				/>
-				<Route
-					path="/profile/:username"
-					element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
-				/>
-			</Routes>
+            <Suspense fallback={<LoadingSpinner size="lg" />}>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={authUser ? <HomePage /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/signup"
+                        element={!authUser ? <RegisterPage /> : <Navigate to="/" />}
+                    />
+                    <Route
+                        path="/login"
+                        element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+                    />
+                    <Route
+                        path="/notifications"
+                        element={authUser ? <NotificationPage /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/profile/:username"
+                        element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+                    />
+                </Routes>
+            </Suspense>
 
-			{authUser && <RightPanel />}
-			<Toaster />
-		</div>
-	);
+            {authUser && <RightPanel />}
+            <Toaster />
+        </div>
+    );
 };
 
 export default App;
