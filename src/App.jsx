@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Sidebar from "./components/common/Sidebar";
 import RightPanel from "./components/common/RightPanel";
 import { toast, Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +14,10 @@ const NotificationPage = lazy(() =>
 	import("./pages/notification/NotificationPage")
 );
 const ProfilePage = lazy(() => import("./pages/profile/ProfilePage"));
+const Sidebar = lazy(() => import("./components/common/Sidebar"));
+const RightPanel = lazy(() => import("./components/common/RightPanel"));
+
+
 
 const App = () => {
 	const { data: authUser, isLoading } = useQuery({
@@ -33,7 +36,7 @@ const App = () => {
 
 				console.log("res", res);
 				console.log("res.ok", res.ok);
-				
+
 				console.log("jsonRes", jsonRes);
 				console.log("jsonRes.error", jsonRes.error);
 
