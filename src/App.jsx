@@ -81,7 +81,7 @@ const App = () => {
 						element={authUser ? <NotificationPage /> : <Navigate to="/login" />}
 					/>
 					<Route
-						path="/profile/:username"
+						path="/profile/:id"
 						element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
 					/>
 				</Routes>
