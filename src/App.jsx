@@ -30,6 +30,10 @@ const App = () => {
 				});
 
 				const jsonRes = await res.json();
+				
+				console.log("res", res);
+				console.log("jsonRes", jsonRes);
+				console.log("jsonRes.error", jsonRes.error);
 
 				if (jsonRes.error || !res.ok) {
 					return null;
