@@ -37,7 +37,7 @@ const Posts = ({ feedType, userId }) => {
 
 				const jsonRes = await res.json();
 
-				if (jsonRes.error || !res.ok) {
+				if (!res.ok) {
 					return null;
 				}
 				// console.log("post jsonRes", jsonRes);

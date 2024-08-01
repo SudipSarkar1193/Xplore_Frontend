@@ -35,8 +35,7 @@ const Sidebar = () => {
 
 				const jsonRes = await res.json();
 
-				if (jsonRes.error)
-					throw new Error(jsonRes.message || "Failed to Log out");
+				if (!res.ok) throw new Error(jsonRes.message || "Failed to Log out");
 
 				return jsonRes;
 			} catch (error) {
@@ -68,8 +67,6 @@ const Sidebar = () => {
 				</div>
 			</dialog>
 			<div className=" md:flex md:flex-[2_2_0] md:w-18 md:max-w-52 h-full">
-
-
 				{/* Mobile layout */}
 				<div className="fixed bottom-0 h-12 w-full md:hidden bg-black border-t border-gray-700 flex justify-around items-center py-2 z-50 ">
 					<Link
@@ -110,7 +107,7 @@ const Sidebar = () => {
 						</div>
 					)}
 				</div>
-				
+
 				{/* destop layout */}
 				<div className="sticky top-0 h-screen  lg:flex lg:items-center flex-col border-r border-gray-700  hidden md:flex  ">
 					<Link to="/" className="flex justify-center md:justify-start">

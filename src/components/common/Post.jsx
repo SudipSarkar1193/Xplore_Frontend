@@ -40,7 +40,7 @@ const Post = ({ post }) => {
 
 				const jsonRes = await res.json();
 
-				if (jsonRes.error) {
+				if (!res.ok) {
 					throw new Error(jsonRes.error || "Failed to delete Post");
 				}
 
