@@ -26,8 +26,8 @@ const ProfilePage = () => {
 	const coverImgRef = useRef(null);
 	const profileImgRef = useRef(null);
 
-	let { username } = useParams();
-	
+	let { id } = useParams();
+
 	const queryClient = useQueryClient();
 	const { followUnfollow, isPending: isPendingFollow } = useFollow();
 
@@ -42,13 +42,10 @@ const ProfilePage = () => {
 		queryKey: ["userProfile"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(
-					`${backendServer}/api/v1/users/profile/${username}`,
-					{
-						method: "GET",
-						credentials: "include",
-					}
-				);
+				const res = await fetch(`${backendServer}/api/v1/users/profile/${id}`, {
+					method: "GET",
+					credentials: "include",
+				});
 
 				const jsonRes = await res.json();
 
@@ -66,7 +63,7 @@ const ProfilePage = () => {
 	useEffect(() => {
 		userProfileRefecth();
 		//queryClient.invalidateQueries({ queryKey: ["posts"] });
-	}, [username, userProfileRefecth]);
+	}, [id, userProfileRefecth]);
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
