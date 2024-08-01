@@ -50,17 +50,18 @@ const App = () => {
 		refetchOnWindowFocus: false,
 	});
 
+	const StyledLoadingSpinner = () => (
+		<div className="h-screen w-screen flex items-center justify-center ">
+			<LoadingSpinner size="lg" />
+		</div>
+	);
 	if (isLoading) {
-		return (
-			<div className="h-screen w-screen flex items-center justify-center ">
-				<LoadingSpinner size="lg" />
-			</div>
-		);
+		return <StyledLoadingSpinner />;
 	}
 
 	return (
 		<div className="flex justify-between max-w-6xl mx-auto">
-			<Suspense fallback={<LoadingSpinner size="lg" />}>
+			<Suspense fallback={<StyledLoadingSpinner />}>
 				{authUser && <Sidebar />}
 				<Routes>
 					<Route
