@@ -16,8 +16,6 @@ const ProfilePage = lazy(() => import("./pages/profile/ProfilePage"));
 const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
-
-
 const App = () => {
 	const { data: authUser, isLoading } = useQuery({
 		queryKey: ["userAuth"],
@@ -54,7 +52,7 @@ const App = () => {
 
 	if (isLoading) {
 		return (
-			<div className="max-h-screen w-screen flex items-center justify-center ">
+			<div className="h-screen w-screen flex items-center justify-center ">
 				<LoadingSpinner size="lg" />
 			</div>
 		);
@@ -62,9 +60,8 @@ const App = () => {
 
 	return (
 		<div className="flex justify-between max-w-6xl mx-auto">
-			{authUser && <Sidebar />}
-
 			<Suspense fallback={<LoadingSpinner size="lg" />}>
+				{authUser && <Sidebar />}
 				<Routes>
 					<Route
 						path="/"
@@ -87,9 +84,9 @@ const App = () => {
 						element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
 					/>
 				</Routes>
+				{authUser && <RightPanel />}
 			</Suspense>
 
-			{authUser && <RightPanel />}
 			<Toaster />
 		</div>
 	);
