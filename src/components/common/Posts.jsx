@@ -1,6 +1,5 @@
 import Post from "./Post.jsx";
 import PostSkeleton from "../skeletons/PostSkeleton.jsx";
-import { POSTS } from "../../utils/db/dummy";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { backendServer } from "../../BackendServer.js";
@@ -60,7 +59,7 @@ const Posts = ({ feedType, userId }) => {
 
 
 	return (
-		<>
+		<div className="">
 			{(isLoading || isRefetching) && (
 				<div className="flex flex-col justify-center">
 					<PostSkeleton />
@@ -78,7 +77,7 @@ const Posts = ({ feedType, userId }) => {
 					))}
 				</div>
 			)}
-		</>
+		</div>
 	);
 };
 export default Posts;

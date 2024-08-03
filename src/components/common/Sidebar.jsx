@@ -11,7 +11,6 @@ import toast from "react-hot-toast";
 import { FaUserPlus } from "react-icons/fa";
 import RightPanel from "./RightPanel";
 import { backendServer } from "../../BackendServer";
-import DraggableMenu from "./DraggableMenu";
 import {
 	CircleMenu,
 	CircleMenuItem,
@@ -75,8 +74,8 @@ const Sidebar = () => {
 			</dialog>
 
 			{/* Circular Menu  */}
-			<div className="h-full w-10 md:hidden">
-				<div className="relative top-1/2">
+			<div className="h-screen w-10 md:hidden z-50">
+				<div className="fixed top-1/2 z-50">
 					<CircleMenu
 						startAngle={-70}
 						rotationAngle={180}

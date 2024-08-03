@@ -5,7 +5,7 @@ import Posts from "../../components/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
 import EditProfileModal from "./EditProfileModal";
 
-import { POSTS } from "../../utils/db/dummy";
+
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
@@ -101,7 +101,7 @@ const ProfilePage = () => {
 	};
 
 	return (
-		<div className="flex-[4_4_0]  border-r border-gray-700 profilePage">
+		<div className="flex-[4_4_0]  border-r border-gray-700 ">
 			{/* HEADER */}
 			{isLoading && <ProfileHeaderSkeleton />}
 
