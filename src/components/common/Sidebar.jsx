@@ -7,9 +7,16 @@ import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { IoIosPersonAdd } from "react-icons/io";
+// import { IoIosPersonAdd } from "react-icons/io";
+import { FaUserPlus } from "react-icons/fa";
 import RightPanel from "./RightPanel";
 import { backendServer } from "../../BackendServer";
+import DraggableMenu from "./DraggableMenu";
+import {
+	CircleMenu,
+	CircleMenuItem,
+	TooltipPlacement,
+} from "react-circular-menu";
 // import { IoMenu } from "react-icons/io5";
 
 const Sidebar = () => {
@@ -66,48 +73,59 @@ const Sidebar = () => {
 					<RightPanel con={true} />
 				</div>
 			</dialog>
-			<div className=" md:flex md:flex-[2_2_0] md:w-18 md:max-w-52 h-full">
-				{/* Mobile layout */}
-				<div className="fixed bottom-0 h-12 w-full md:hidden bg-black border-t border-gray-700 flex justify-around items-center py-2 z-50 ">
-					<Link
-						to="/"
-						className="flex gap-3 items-center hover:bg-secondary transition-all rounded-full py-2 px-4"
-					>
-						<MdHomeFilled className="w-6 h-6" />
-					</Link>
-					<Link
-						to="/notifications"
-						className="flex gap-3 items-center hover:bg-secondary transition-all rounded-full py-2 px-4"
-					>
-						<IoNotifications className="w-6 h-6" />
-					</Link>
-					<Link
-						to={`/profile/${authUser?.username}`}
-						className="flex gap-3 items-center hover:bg-secondary transition-all rounded-full py-2 px-4"
-					>
-						<FaUser className="w-6 h-6" />
-					</Link>
 
-					<span
-						className="flex gap-3 items-center hover:bg-secondary transition-all rounded-full py-2 px-4"
-						onClick={() => document.getElementById("my_modal_2").showModal()}
+			{/* Circular Menu  */}
+			<div className="h-full w-10 md:hidden">
+				<div className="relative top-1/2">
+					<CircleMenu
+						startAngle={-70}
+						rotationAngle={180}
+						itemSize={2}
+						radius={7}
+						rotationAngleInclusive={false}
+						
 					>
-						<IoIosPersonAdd size={30} />
-					</span>
+						<CircleMenuItem>
+							<Link to="/">
+								<MdHomeFilled size={25} />
+							</Link>
+						</CircleMenuItem>
 
-					{authUser && (
-						<div className="flex items-center gap-2">
+						<CircleMenuItem>
+							<Link to={`/profile/${authUser?.username}`}>
+								<FaUser size={25} />
+							</Link>
+						</CircleMenuItem>
+
+						<CircleMenuItem>
+							<Link to="/notifications">
+								<IoNotifications size={25} />
+							</Link>
+						</CircleMenuItem>
+
+						<CircleMenuItem>
+							<FaUserPlus
+								size={25}
+								onClick={() =>
+									document.getElementById("my_modal_2").showModal()
+								}
+							/>
+						</CircleMenuItem>
+
+						<CircleMenuItem>
 							<BiLogOut
-								className="w-5 h-5 cursor-pointer"
+								size={25}
 								onClick={(e) => {
 									e.preventDefault();
 									logout();
 								}}
 							/>
-						</div>
-					)}
+						</CircleMenuItem>
+					</CircleMenu>
 				</div>
+			</div>
 
+			<div className=" md:flex md:flex-[2_2_0] md:w-18 md:max-w-52 h-full">
 				{/* destop layout */}
 				<div className="sticky top-0 h-screen  lg:flex lg:items-center flex-col border-r border-gray-700  hidden md:flex  ">
 					<Link to="/" className="flex justify-center md:justify-start">
@@ -148,7 +166,7 @@ const Sidebar = () => {
 									document.getElementById("my_modal_1").showModal()
 								}
 							>
-								<IoIosPersonAdd className="w-6 h-6" />
+								<FaUserPlus className="w-6 h-6" />
 								<span className="text-lg hidden md:block">Suggested Users</span>
 							</span>
 						</li>
