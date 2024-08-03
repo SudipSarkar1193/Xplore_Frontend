@@ -52,13 +52,13 @@
 
 @media (max-width: 768px) {
   /* Styles for phones and tablets */
-  .post{
-    max-height: calc(100vh - 60px);
+  /* .post{
     
-  }
+    
+  } */
+
   .profilePage{
-    overflow-y: scroll;
-    max-height: calc(100vh - 60px);
+    overflow-y: scroll;  
    
  }
 }
