@@ -110,7 +110,6 @@ const LoginPage = () => {
 				credentials: "include",
 				body: JSON.stringify(userInfo),
 			});
-			
 
 			if (!response.ok) {
 				throw new Error("Failed to save user info");
@@ -132,7 +131,6 @@ const LoginPage = () => {
 
 	const handleSignInWithFirebase = async () => {
 		try {
-			
 			const result = await signInWithPopup(auth, provider);
 			const user = result.user;
 			let email = user.email;
@@ -153,19 +151,19 @@ const LoginPage = () => {
 	};
 
 	return (
-		<div className="max-w-screen-xl mx-auto flex h-svh px-10  overflow-x-hidden overflow-y-hidden">
+		<div className="max-w-screen-xl mx-auto flex h-svh px-10  overflow-x-hidden overflow-y-hidden lg:px-20">
 			<div className="flex-1 hidden lg:flex items-center  justify-center">
 				{" "}
 				{/* Use flex-1 to allow a flex item to  grow and shrink as needed, ignoring its initial size: */}
-				<XSvg className=" lg:w-2/3 fill-white container " />
+				<XSvg className=" lg:w-2/3 fill-white  hover:animate-bounce active:animate-bounce container" />
 			</div>
 
 			<div className="flex-1 flex flex-col justify-center items-center  container ">
 				<form
-					className="lg:w-2/3 mx-auto md:mx-20 flex gap-4 flex-col  "
+					className="lg:w-2/3 mx-auto md:mx-20 flex gap-4 flex-col "
 					onSubmit={handleSubmit}
 				>
-					<XSvg className="w-32 lg:hidden fill-white mx-auto svg-container" />
+					<XSvg className="w-32 lg:hidden fill-white mx-auto svg-container  hover:animate-bounce active:animate-bounce container" />
 					<h1 className="text-2xl font-extrabold text-white mx-auto ">
 						Let's Go...
 					</h1>

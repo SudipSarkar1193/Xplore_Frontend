@@ -123,7 +123,7 @@ const RegisterPage = () => {
 			)}
 
 			<div className="flex-1 hidden lg:flex items-center justify-center ">
-				<XSvg className=" lg:w-2/3  fill-white svg-container" />
+				<XSvg className=" lg:w-2/3  fill-white svg-container hover:animate-bounce active:animate-bounce container" />
 			</div>
 			<div className="flex-1 flex flex-col justify-center items-center container ">
 				<form
@@ -132,7 +132,7 @@ const RegisterPage = () => {
 				>
 					<div className="flex items-center justify-around">
 						<h1 className="text-2xl font-extrabold text-white">Join today.</h1>
-						<XSvg className="w-28 lg:hidden fill-white inline-block svg-container" />
+						<XSvg className="w-28 lg:hidden fill-white inline-block svg-container hover:animate-bounce active:animate-bounce container" />
 					</div>
 
 					<label className="input input-bordered rounded flex items-center gap-2">

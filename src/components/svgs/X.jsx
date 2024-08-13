@@ -1,4 +1,4 @@
-import "../common/Tilted.css";
+
 const XSvg = (props) => (
 	<div className=" ">
 		<svg aria-hidden="true" viewBox="0 0 24 24" {...props}>
