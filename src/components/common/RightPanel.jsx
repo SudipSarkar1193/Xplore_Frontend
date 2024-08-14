@@ -101,8 +101,10 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 											className="btn btn-outline rounded-full btn-sm"
 											onClick={(e) => handleFollow(e, user._id)}
 										>
-											{isPending && loadingUserId == user._id  && <LoadingSpinner size="sm" />}
-											{!isPending && (isFollowing ? "Unfollow" : "Follow")}
+											loadingUserId == user._id ? (
+											{isPending && <LoadingSpinner size="sm" />}
+											{!isPending && (isFollowing ? "Unfollow" : "Follow")}) :
+											(isFollowing ? "Unfollow" : "Follow")
 										</button>
 									</div>
 								</div>
