@@ -102,7 +102,7 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 									</Link>
 									<div>
 										<div onClick={(e) => handleFollow(e, user._id)}>
-											{loadingUserId == user._id ? (
+											{loadingUserId == user._id && isPending ? (
 												<LoadingSpinner size="sm" />
 											) : followStatus ? (
 												<button className="btn bg-transparent text-gray-400  hover:bg-purple-900  rounded-full btn-sm  border-zinc-600">

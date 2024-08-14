@@ -119,7 +119,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 											</Link>
 											<div>
 												<div onClick={(e) => handleFollow(e, user._id)}>
-													{loadingUserId == user._id ? (
+													{loadingUserId == user._id && isPending ? (
 														<LoadingSpinner size="sm" />
 													) : followStatus ? (
 														<button className="btn bg-transparent text-gray-400 hover:bg-slate-500  active:bg-slate-500 rounded-full btn-sm  border-zinc-600">
