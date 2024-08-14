@@ -5,8 +5,6 @@ import Posts from "../../components/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
 import EditProfileModal from "./EditProfileModal";
 
-
-
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
@@ -42,10 +40,13 @@ const ProfilePage = () => {
 		queryKey: ["userProfile"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`${backendServer}/api/v1/users/profile/${username}`, {
-					method: "GET",
-					credentials: "include",
-				});
+				const res = await fetch(
+					`${backendServer}/api/v1/users/profile/${username}`,
+					{
+						method: "GET",
+						credentials: "include",
+					}
+				);
 
 				const jsonRes = await res.json();
 

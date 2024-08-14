@@ -8,10 +8,13 @@ const useFollow = () => {
 	const { mutate: followUnfollow, isPending } = useMutation({
 		mutationFn: async (userId) => {
 			try {
-				const res = await fetch(`${backendServer}/api/v1/users/follow/${userId}`, {
-					method: "POST",
-					credentials: "include",
-				});
+				const res = await fetch(
+					`${backendServer}/api/v1/users/follow/${userId}`,
+					{
+						method: "POST",
+						credentials: "include",
+					}
+				);
 
 				const jsonRes = await res.json();
 
@@ -26,7 +29,7 @@ const useFollow = () => {
 		},
 		onSuccess: () => {
 			Promise.all([
-				queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
+				//queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
 				queryClient.invalidateQueries({ queryKey: ["userAuth"] }),
 			]);
 		},

@@ -17,7 +17,7 @@ import {
 	CircleMenuItem,
 	TooltipPlacement,
 } from "react-circular-menu";
-import SearchUser from "./SearchUser";
+import {SearchUser} from "./SearchUser";
 // import { IoMenu } from "react-icons/io5";
 
 const Sidebar = () => {
