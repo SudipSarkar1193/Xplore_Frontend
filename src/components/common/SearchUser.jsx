@@ -121,7 +121,8 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 													{isPending && loadingUserId == user._id && (
 														<LoadingSpinner size="sm" />
 													)}
-													{isFollowing ? "Unfollow" : "Follow"}
+													{loadingUserId != user._id &&
+														(isFollowing ? "Unfollow" : "Follow")}
 												</button>
 											</div>
 										</div>
