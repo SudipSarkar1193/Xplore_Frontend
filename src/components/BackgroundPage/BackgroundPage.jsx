@@ -24,8 +24,8 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 			width = window.innerWidth;
 			height = window.innerHeight;
 
-			const largeHeader = largeHeaderRef.current;
-			largeHeader.style.height = height + "px";
+			const largeHeader = largeHeaderRef ? largeHeaderRef.current : null;
+			if (largeHeader) largeHeader.style.height = height + "px";
 
 			const canvas = canvasRef.current;
 			canvas.width = width;
@@ -110,7 +110,7 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 		function resize() {
 			width = window.innerWidth;
 			height = window.innerHeight;
-			largeHeaderRef.current.style.height = height + "px";
+			if (largeHeaderRef) largeHeaderRef.current.style.height = height + "px";
 			canvasRef.current.width = width;
 			canvasRef.current.height = height;
 		}

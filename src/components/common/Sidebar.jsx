@@ -16,6 +16,7 @@ import {
 	CircleMenuItem,
 	TooltipPlacement,
 } from "react-circular-menu";
+import SearchUser from "./SearchUser";
 // import { IoMenu } from "react-icons/io5";
 
 const Sidebar = () => {
@@ -69,7 +70,7 @@ const Sidebar = () => {
 							✕
 						</button>
 					</form>
-					<RightPanel con={true} />
+					<SearchUser show={true} />
 				</div>
 			</dialog>
 
@@ -82,7 +83,6 @@ const Sidebar = () => {
 						itemSize={2}
 						radius={7}
 						rotationAngleInclusive={false}
-						
 					>
 						<CircleMenuItem>
 							<Link to="/">

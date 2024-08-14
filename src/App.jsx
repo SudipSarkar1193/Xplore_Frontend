@@ -8,6 +8,7 @@ import { backendServer } from "./BackendServer";
 
 import { BackgroundPage } from "./components/BackgroundPage/BackgroundPage";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import SearchUser from "./components/common/SearchUser";
 
 const HomePage = lazy(() => import("./pages/home/HomePage"));
 const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
@@ -88,7 +89,7 @@ const App = () => {
 						element={<EmailVerifyPage />}
 					/>
 				</Routes>
-				{authUser && <RightPanel />}
+				{authUser && <SearchUser />}
 			</Suspense>
 
 			<Toaster />

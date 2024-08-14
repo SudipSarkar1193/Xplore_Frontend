@@ -7,25 +7,29 @@ import { useEffect } from "react";
 import { backendServer } from "../../BackendServer.js";
 import { IoIosPersonAdd } from "react-icons/io";
 
-const RightPanel = ({ con = false }) => {
+const RightPanel = ({ con = true }) => {
+	
 	const { data: suggestedUsers, isLoading } = useQuery({
 		queryKey: ["suggestedUsers"],
 		queryFn: async () => {
 			try {
-				const res = await fetch(`${backendServer}/api/v1/users/suggestions`, {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					credentials: "include",
-				});
+				const res = await fetch(
+					`${backendServer}/api/v1/users/getusers/suggestions`,
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						credentials: "include",
+					}
+				);
 
 				if (!res.ok) {
 					return null;
 				}
 				const jsonRes = await res.json();
 
-				return await jsonRes.data.suggestions;
+				return await jsonRes.data.users;
 			} catch (error) {
 				console.log(error.message || "Error fetching suggestions");
 			}
@@ -40,10 +44,13 @@ const RightPanel = ({ con = false }) => {
 		followUnfollow(id);
 	};
 
+	
+
 	return (
-		<div className={` ${con ? "block" : "hidden"} lg:block sticky my-4 ml-4 right:0`}>
-			<div className={`${con ? "block" : "hidden"} lg:block  bg-[#16181C] p-4 rounded-md sticky top-2`}>
-				<p className="font-bold mb-2">Who to follow </p>
+		<div className={`  lg:block sticky my-4 ml-4 right:0 `}>
+			<div
+				className={`block lg:block   p-4 rounded-md sticky top-2`}
+			>
 				<div className="flex flex-col gap-4">
 					{/* item */}
 					{isLoading && (
