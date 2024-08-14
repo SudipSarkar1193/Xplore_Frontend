@@ -36,6 +36,10 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 
 	const { followUnfollow, isPending } = useFollow();
 
+	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
+
+	
+
 	const handleFollow = async (e, id) => {
 		console.log(id);
 		e.preventDefault();
@@ -83,10 +87,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 										user.fullName.toLowerCase().includes(search.toLowerCase())
 								)
 								?.map((user) => {
-									const followStatus = queryClient.getQueryData([
-										"followStatus",
-										user._id,
-									]);
+									const isFollowing = authUser?.following.includes(user?._id);
 
 									return (
 										<div
@@ -124,7 +125,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 													onClick={(e) => handleFollow(e, user._id)}
 												>
 													{isPending && <LoadingSpinner size="sm" />}
-													{!isPending && (followStatus ? "Unfollow" : "Follow")}
+													{!isPending && (isFollowing ? "Unfollow" : "Follow")}
 												</button>
 											</div>
 										</div>

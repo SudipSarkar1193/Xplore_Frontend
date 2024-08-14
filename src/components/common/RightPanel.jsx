@@ -39,6 +39,8 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 		retry: false,
 	});
 
+	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
+
 	const { followUnfollow, isPending } = useFollow();
 
 	const handleFollow = async (e, id) => {
@@ -73,10 +75,7 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 					)}
 					{!isLoading &&
 						suggestedUsers?.map((user) => {
-							const followStatus = queryClient.getQueryData([
-								"followStatus",
-								user._id,
-							]);
+							const isFollowing = authUser?.following.includes(user?._id);
 							return (
 								<div className="flex items-center justify-between gap-4">
 									<Link to={`/profile/${user?.username}`} key={user._id}>
@@ -107,7 +106,7 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 											onClick={(e) => handleFollow(e, user._id)}
 										>
 											{isPending && <LoadingSpinner size="sm" />}
-											{!isPending && (followStatus ? "Unfollow" : "Follow")}
+											{!isPending && (isFollowing ? "Unfollow" : "Follow")}
 										</button>
 									</div>
 								</div>
