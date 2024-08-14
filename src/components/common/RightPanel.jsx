@@ -101,19 +101,14 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 										</div>
 									</Link>
 									<div>
-										<div onClick={(e) => handleFollow(e, user._id)}>
-											{loadingUserId == user._id && isPending ? (
-												<LoadingSpinner size="sm" />
-											) : followStatus ? (
-												<button className="btn bg-transparent text-gray-400  hover:bg-purple-900  rounded-full btn-sm  border-zinc-600">
-													Unfollow
-												</button>
-											) : (
-												<button className="btn bg-white text-black rounded-full hover:opacity-90 btn-sm">
-													Follow
-												</button>
-											)}
-										</div>
+										<button
+											className="btn btn-outline rounded-full btn-sm"
+											onClick={(e) => handleFollow(e, id)}
+										>
+											{isPending && <LoadingSpinner size="sm" />}
+											{!isPending &&
+												(followStatus ? "Unfollow" : "Follow")}
+										</button>
 									</div>
 								</div>
 							);
