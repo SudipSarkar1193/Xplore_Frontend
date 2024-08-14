@@ -76,8 +76,10 @@ export const SearchUser = ({ show = false }) => {
 							users
 								?.filter(
 									(user) =>
-										user.username.toLowerCase().includes(search) ||
-										user.fullName.toLowerCase().includes(search)
+										user.username
+											.toLowerCase()
+											.includes(search?.toLowerCase()) ||
+										user.fullName.toLowerCase().includes(search?.toLowerCase())
 								)
 								?.map((user) => (
 									<div className="flex items-center justify-between gap-4">
