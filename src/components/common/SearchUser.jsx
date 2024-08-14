@@ -118,10 +118,10 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 													className="btn btn-outline rounded-full btn-sm"
 													onClick={(e) => handleFollow(e, user._id)}
 												>
-													loadingUserId == user._id ? (
-													{isPending && <LoadingSpinner size="sm" />}
-													{!isPending && (isFollowing ? "Unfollow" : "Follow")})
-													: (isFollowing ? "Unfollow" : "Follow")
+													{isPending && loadingUserId == user._id && (
+														<LoadingSpinner size="sm" />
+													)}
+													{isFollowing ? "Unfollow" : "Follow"}
 												</button>
 											</div>
 										</div>
