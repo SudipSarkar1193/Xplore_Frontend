@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import RightPanelSkeleton from "../skeletons/RightPanelSkeleton.jsx";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useFollow from "../../custom_hooks/useFollow.js";
-import { useFollowStatus } from "../../custom_hooks/useFollowStatus";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 import { useEffect, useState } from "react";
 import { backendServer } from "../../BackendServer.js";
@@ -49,9 +48,6 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 		setLoadingUserId(id);
 		try {
 			followUnfollow(id);
-
-			// set the follow status in the cache memory
-			queryClient.setQueryData(["followStatus", id], (prev) => !prev);
 		} catch (error) {
 			console.log("Error during follow/unfollow:", error);
 		} finally {
@@ -105,7 +101,7 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 											className="btn btn-outline rounded-full btn-sm"
 											onClick={(e) => handleFollow(e, user._id)}
 										>
-											{isPending && <LoadingSpinner size="sm" />}
+											{isPending && loadingUserId == user._id  && <LoadingSpinner size="sm" />}
 											{!isPending && (isFollowing ? "Unfollow" : "Follow")}
 										</button>
 									</div>

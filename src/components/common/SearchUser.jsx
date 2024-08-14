@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import RightPanel from "./RightPanel";
 import { FaSearch } from "react-icons/fa";
-import { useFollowStatus } from "../../custom_hooks/useFollowStatus";
+
 import useFollow from "../../custom_hooks/useFollow";
 import { backendServer } from "../../BackendServer";
 import LoadingSpinner from "./LoadingSpinner";
@@ -41,14 +41,10 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 	
 
 	const handleFollow = async (e, id) => {
-		console.log(id);
 		e.preventDefault();
 		setLoadingUserId(id);
 		try {
 			followUnfollow(id);
-
-			// set the follow status in the cache memory
-			queryClient.setQueryData(["followStatus", id], (prev) => !prev);
 		} catch (error) {
 			console.log("Error during follow/unfollow:", error);
 		} finally {
@@ -124,7 +120,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 													className="btn btn-outline rounded-full btn-sm"
 													onClick={(e) => handleFollow(e, user._id)}
 												>
-													{isPending && <LoadingSpinner size="sm" />}
+													{isPending && loadingUserId == user._id && <LoadingSpinner size="sm" />}
 													{!isPending && (isFollowing ? "Unfollow" : "Follow")}
 												</button>
 											</div>
