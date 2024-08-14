@@ -74,7 +74,7 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 							const isFollowing = authUser?.following.includes(user?._id);
 							console.log(
 								"loadingUserId == user._id",
-								loadingUserId == user._id
+								loadingUserId === user._id
 							);
 							return (
 								<div className="flex items-center justify-between gap-4">

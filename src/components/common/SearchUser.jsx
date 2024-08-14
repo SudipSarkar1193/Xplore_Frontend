@@ -84,7 +84,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 									const isFollowing = authUser?.following.includes(user?._id);
 									console.log(
 										"loadingUserId == user._id",
-										loadingUserId == user._id
+										loadingUserId === user._id
 									);
 									return (
 										<div
