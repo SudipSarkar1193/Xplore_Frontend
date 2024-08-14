@@ -40,7 +40,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 
 	const handleFollow = async (e, id) => {
 		e.preventDefault();
-		console.log("Setting loadingUserId to:", id);
+		
 		setLoadingUserId(String(id)); // Ensure id is set as a string
 
 		try {
@@ -82,14 +82,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 								)
 								?.map((user) => {
 									const isFollowing = authUser?.following.includes(user?._id);
-									console.log(
-										"loadingUserId == user._id",
-										loadingUserId === user._id
-									);
-									console.log("Type of loadingUserId:", typeof loadingUserId);
-									console.log("Type of user._id:", typeof user._id);
-									console.log("loadingUserId:", `"${loadingUserId}"`);
-									console.log("user._id:", `"${user._id}"`);
+									
 
 									return (
 										<div

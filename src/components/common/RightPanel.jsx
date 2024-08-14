@@ -43,7 +43,7 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 	const { followUnfollow, isPending } = useFollow();
 
 	const handleFollow = async (e, id) => {
-		console.log(id);
+		
 		e.preventDefault();
 		setLoadingUserId(id);
 		try {
@@ -72,10 +72,7 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 					{!isLoading &&
 						suggestedUsers?.map((user) => {
 							const isFollowing = authUser?.following.includes(user?._id);
-							console.log(
-								"loadingUserId == user._id",
-								loadingUserId === user._id
-							);
+							
 							return (
 								<div className="flex items-center justify-between gap-4">
 									<Link to={`/profile/${user?.username}`} key={user._id}>
