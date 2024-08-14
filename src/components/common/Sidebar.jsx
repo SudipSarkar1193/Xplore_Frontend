@@ -3,6 +3,7 @@ import XSvg from "../svgs/X";
 import { MdHomeFilled } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -103,7 +104,7 @@ const Sidebar = () => {
 						</CircleMenuItem>
 
 						<CircleMenuItem>
-							<FaUserPlus
+							<FaSearch
 								size={25}
 								onClick={() =>
 									document.getElementById("my_modal_2").showModal()
@@ -165,7 +166,7 @@ const Sidebar = () => {
 									document.getElementById("my_modal_1").showModal()
 								}
 							>
-								<FaUserPlus className="w-6 h-6" />
+								<FaSearch className="w-6 h-6" />
 								<span className="text-lg hidden md:block">Suggested Users</span>
 							</span>
 						</li>
