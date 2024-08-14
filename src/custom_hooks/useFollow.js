@@ -22,12 +22,12 @@ const useFollow = () => {
 					throw new Error(data.error || "Something went wrong!");
 				}
 
-				return jsonRes;
+				return { jsonRes, userId };
 			} catch (error) {
 				throw error;
 			}
 		},
-		onSuccess: () => {
+		onSuccess: ({ jsonRes, userId }) => {
 			Promise.all([
 				queryClient.invalidateQueries({ queryKey: ["followStatus", userId] }),
 				queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
