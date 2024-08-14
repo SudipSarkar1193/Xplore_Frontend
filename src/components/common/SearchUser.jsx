@@ -40,9 +40,11 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 
 	const handleFollow = async (e, id) => {
 		e.preventDefault();
-		setLoadingUserId(id);
+		console.log("Setting loadingUserId to:", id);
+		setLoadingUserId(String(id)); // Ensure id is set as a string
+
 		try {
-			followUnfollow(id);
+			await followUnfollow(id);
 		} catch (error) {
 			console.log("Error during follow/unfollow:", error);
 		} finally {
