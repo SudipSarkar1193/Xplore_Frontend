@@ -122,7 +122,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 													onClick={(e) => handleFollow(e, user._id)}
 												>
 													{isPending && <LoadingSpinner size="sm" />}
-													{!isPending && isFollowing ? "Unfollow" : "Follow"}
+													{!isPending && (isFollowing ? "Unfollow" : "Follow")}
 												</button>
 											</div>
 										</div>
