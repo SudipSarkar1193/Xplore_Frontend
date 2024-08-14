@@ -82,7 +82,10 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 								)
 								?.map((user) => {
 									const isFollowing = authUser?.following.includes(user?._id);
-
+									console.log(
+										"loadingUserId == user._id",
+										loadingUserId == user._id
+									);
 									return (
 										<div
 											className="flex items-center justify-between gap-4"
@@ -118,11 +121,8 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 													className="btn btn-outline rounded-full btn-sm"
 													onClick={(e) => handleFollow(e, user._id)}
 												>
-													{isPending && loadingUserId == user._id && (
-														<LoadingSpinner size="sm" />
-													)}
-													{loadingUserId != user._id &&
-														(isFollowing ? "Unfollow" : "Follow")}
+													{isPending && <LoadingSpinner size="sm" />}
+													{!isPending && isFollowing ? "Unfollow" : "Follow"}
 												</button>
 											</div>
 										</div>
