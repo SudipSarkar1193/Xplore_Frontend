@@ -42,6 +42,7 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 	const { followUnfollow, isPending } = useFollow();
 
 	const handleFollow = async (e, id) => {
+		console.log(id);
 		e.preventDefault();
 		setLoadingUserId(id);
 		try {
@@ -103,11 +104,10 @@ const RightPanel = ({ con = true, limit = 15 }) => {
 									<div>
 										<button
 											className="btn btn-outline rounded-full btn-sm"
-											onClick={(e) => handleFollow(e, id)}
+											onClick={(e) => handleFollow(e, user._id)}
 										>
 											{isPending && <LoadingSpinner size="sm" />}
-											{!isPending &&
-												(followStatus ? "Unfollow" : "Follow")}
+											{!isPending && (followStatus ? "Unfollow" : "Follow")}
 										</button>
 									</div>
 								</div>
