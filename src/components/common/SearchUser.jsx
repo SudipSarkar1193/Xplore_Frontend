@@ -47,8 +47,6 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 			await followUnfollow(id);
 		} catch (error) {
 			console.log("Error during follow/unfollow:", error);
-		} finally {
-			setLoadingUserId(null);
 		}
 	};
 
