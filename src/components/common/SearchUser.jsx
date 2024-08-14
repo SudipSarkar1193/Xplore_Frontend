@@ -86,6 +86,11 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 										"loadingUserId == user._id",
 										loadingUserId === user._id
 									);
+									console.log("Type of loadingUserId:", typeof loadingUserId);
+									console.log("Type of user._id:", typeof user._id);
+									console.log("loadingUserId:", `"${loadingUserId}"`);
+									console.log("user._id:", `"${user._id}"`);
+
 									return (
 										<div
 											className="flex items-center justify-between gap-4"
