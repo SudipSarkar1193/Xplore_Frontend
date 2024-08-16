@@ -38,13 +38,13 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
-	const handleFollow = async (e, id) => {
+	const handleFollow =  (e, id) => {
 		e.preventDefault();
 		
 		setLoadingUserId(String(id)); // Ensure id is set as a string
 
 		try {
-			await followUnfollow(id);
+			followUnfollow(id,authUser?._id);
 		} catch (error) {
 			console.log("Error during follow/unfollow:", error);
 		}

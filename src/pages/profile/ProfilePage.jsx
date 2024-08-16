@@ -9,12 +9,15 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
+import { GrClose } from "react-icons/gr";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatMemberSinceDate } from "../../utils/memberSinceDate";
 import useFollow from "../../custom_hooks/useFollow.js";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import useUpdateUserProfile from "../../custom_hooks/useUpdateProfile.js";
 import { backendServer } from "../../BackendServer.js";
+
+import UserList from "../../components/common/UserList.jsx";
 
 const ProfilePage = () => {
 	const [coverImg, setCoverImg] = useState(null);
@@ -37,7 +40,7 @@ const ProfilePage = () => {
 		isFetching: isUserProfileFetching,
 		refetch: userProfileRefecth,
 	} = useQuery({
-		queryKey: ["userProfile"],
+		queryKey: ["userProfile", username],
 		queryFn: async () => {
 			try {
 				const res = await fetch(
@@ -61,10 +64,65 @@ const ProfilePage = () => {
 		},
 	});
 
+	const { data: followers, isLoading: isfollowersLoading } = useQuery({
+		queryKey: ["followers", user?._id],
+		queryFn: async () => {
+			try {
+				const res = await fetch(
+					`${backendServer}/api/v1/users/getfollowers/${user?._id}`,
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						credentials: "include",
+					}
+				);
+
+				if (!res.ok) {
+					return null;
+				}
+				const jsonRes = await res.json();
+
+				return await jsonRes.data.followers;
+			} catch (error) {
+				console.error(error.message || "Error fetching followers");
+			}
+		},
+		retry: false,
+	});
+
+	const { data: followings, isLoading: isfollowingsLoading } = useQuery({
+		queryKey: ["followings", user?._id],
+		queryFn: async () => {
+			try {
+				const res = await fetch(
+					`${backendServer}/api/v1/users/getfollowings/${user?._id}`,
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						credentials: "include",
+					}
+				);
+
+				if (!res.ok) {
+					return null;
+				}
+				const jsonRes = await res.json();
+
+				return await jsonRes.data.followings;
+			} catch (error) {
+				console.error(error.message || "Error fetching followers");
+			}
+		},
+		retry: false,
+	});
+
 	useEffect(() => {
 		userProfileRefecth();
-		//queryClient.invalidateQueries({ queryKey: ["posts"] });
-	}, [username, userProfileRefecth]);
+	}, [username, userProfileRefecth, user, followers, followings]);
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
@@ -74,7 +132,28 @@ const ProfilePage = () => {
 
 	const followUnfollowHandler = (e) => {
 		e.preventDefault();
-		followUnfollow(user._id);
+		try {
+			followUnfollow(user._id, authUser?._id);
+
+			// Optimistically update the UI
+			let userId = user._id;
+
+			//If i follow someone else's profile :
+			queryClient.setQueryData(["followers", userId], (oldData) => {
+				isFollowing
+					? oldData.filter((usr) => usr._id != authUser._id)
+					: [...oldData, authUser];
+			});
+
+			//If my own profile:
+			queryClient.setQueryData(["followings", authUser?._id], (oldData) =>
+				oldData.filter((usr) =>
+					isFollowing ? usr._id != userId : [...oldData]
+				)
+			);
+		} catch (error) {
+			console.error(error.message, " -> ->", error);
+		}
 	};
 
 	// Habdling update cover and profile img:
@@ -109,6 +188,53 @@ const ProfilePage = () => {
 			{!isLoading && !user && (
 				<p className="text-center text-lg mt-4">User not found</p>
 			)}
+
+			<dialog id="followers-modal" className="modal ">
+				<div className="modal-box absolute z-70 top-12">
+					<form method="dialog">
+						{/* if there is a button in form, it will close the modal */}
+						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+							<GrClose size={27} />
+						</button>
+					</form>
+					<div className="w-full flex justify-center text-lg text-white">
+						Followers
+					</div>
+					{isLoading ? (
+						<LoadingSpinner />
+					) : followers?.length == 0 ? (
+						<div className="w-full flex justify-center text-lg text-white">
+							Whoops! Nobody follows you 🥲
+						</div>
+					) : (
+						<UserList users={followers} isLoading={isfollowersLoading} />
+					)}
+				</div>
+			</dialog>
+
+			<dialog id="following-modal" className="modal ">
+				<div className="modal-box absolute z-70 top-12">
+					<form method="dialog">
+						{/* if there is a button in form, it will close the modal */}
+						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+							<GrClose size={27} />
+						</button>
+					</form>
+					<div className="w-full flex justify-center text-lg text-white">
+						Following
+					</div>
+					{isLoading ? (
+						<LoadingSpinner />
+					) : followings?.length == 0 ? (
+						<div className="w-full flex justify-center text-lg text-white">
+							hOOh! You follow nobody 🥸
+						</div>
+					) : (
+						<UserList users={followings} isLoading={isfollowingsLoading} />
+					)}
+				</div>
+			</dialog>
+
 			<div className="flex flex-col  border-r border-gray-700">
 				{!isLoading && user && (
 					<div className="bg-transparent">
@@ -232,17 +358,31 @@ const ProfilePage = () => {
 								</div>
 							</div>
 							<div className="flex gap-2">
-								<div className="flex gap-1 items-center">
+								<div
+									className="flex gap-1 items-center cursor-pointer hover:text-blue-600 active:text-blue-600"
+									onClick={() =>
+										document.getElementById("following-modal").showModal()
+									}
+								>
 									<span className="font-bold text-xs">
 										{user.following?.length}
 									</span>
-									<span className="text-slate-500 text-xs">Following</span>
+									<span className="text-slate-500 text-xs hover:text-blue-600 active:text-blue-600">
+										Following
+									</span>
 								</div>
-								<div className="flex gap-1 items-center">
-									<span className="font-bold text-xs">
+								<div
+									className="flex gap-1 items-center cursor-pointer hover:text-blue-600 active:text-blue-600"
+									onClick={() =>
+										document.getElementById("followers-modal").showModal()
+									}
+								>
+									<span className="font-bold text-xs ">
 										{user?.followers.length}
 									</span>
-									<span className="text-slate-500 text-xs">Followers</span>
+									<span className="text-slate-500 text-xs hover:text-blue-600 active:text-blue-600">
+										Followers
+									</span>
 								</div>
 							</div>
 						</div>

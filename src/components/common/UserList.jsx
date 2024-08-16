@@ -1,60 +1,33 @@
-import { Link } from "react-router-dom";
-import RightPanelSkeleton from "../skeletons/RightPanelSkeleton.jsx";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import useFollow from "../../custom_hooks/useFollow.js";
-import LoadingSpinner from "./LoadingSpinner.jsx";
-import { useEffect, useState } from "react";
-import { backendServer } from "../../BackendServer.js";
-import { IoIosPersonAdd } from "react-icons/io";
+import React, { useState } from "react";
+import RightPanel from "./RightPanel";
+import RightPanelSkeleton from "../skeletons/RightPanelSkeleton";
+import LoadingSpinner from "./LoadingSpinner";
+import useFollow from "../../custom_hooks/useFollow";
+import { backendServer } from "../../BackendServer";
+import { Link } from "react-router-dom";
 
-const RightPanel = ({ limit = 15 }) => {
+const UserList = ({ limit = 15, users, isLoading }) => {
 	const [loadingUserId, setLoadingUserId] = useState(null);
-	const queryClient = useQueryClient();
-	const { data: suggestedUsers, isLoading } = useQuery({
-		queryKey: ["suggestedUsers"],
-		queryFn: async () => {
-			try {
-				const res = await fetch(
-					`${backendServer}/api/v1/users/getusers/suggestions`,
-					{
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						credentials: "include",
-					}
-				);
-
-				if (!res.ok) {
-					return null;
-				}
-				const jsonRes = await res.json();
-
-				return await jsonRes.data.users;
-			} catch (error) {
-				console.log(error.message || "Error fetching suggestions");
-			}
-		},
-		retry: false,
-	});
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
 	const { followUnfollow, isPending } = useFollow();
-
-	const handleFollow = (e, user) => {
+	const queryClient = useQueryClient();
+	const handleFollow = (e, id) => {
 		e.preventDefault();
-		const id = user._id;
-		
-		setLoadingUserId(id);
+		setLoadingUserId(String(id));
 		try {
 			followUnfollow(id, authUser?._id);
 
+			// Optimistically update the UI
+			let userId = id;
 			let isFollowingProfile = authUser?.following.includes(id);
 		
+			//If my own profile:
 			queryClient.setQueryData(["followings", authUser?._id], (oldData) =>
 				oldData?.filter((usr) =>
-					isFollowingProfile ? usr._id != id : [...oldData, user]
+					isFollowingProfile ? usr._id != userId : [...oldData]
 				)
 			);
 		} catch (error) {
@@ -77,7 +50,7 @@ const RightPanel = ({ limit = 15 }) => {
 						</>
 					)}
 					{!isLoading &&
-						suggestedUsers?.map((user) => {
+						users?.map((user) => {
 							const isFollowing = authUser?.following.includes(user?._id);
 
 							return (
@@ -107,9 +80,16 @@ const RightPanel = ({ limit = 15 }) => {
 									<div>
 										<button
 											className="btn btn-outline rounded-full btn-sm"
-											onClick={(e) => handleFollow(e, user)}
+											onClick={(e) => handleFollow(e, user._id)}
 										>
-											{isPending && <LoadingSpinner size="sm" />}
+											{isPending && loadingUserId == user._id.toString() && (
+												<LoadingSpinner size="sm" />
+											)}
+
+											{isPending &&
+												loadingUserId != user._id.toString() &&
+												(isFollowing ? "Unfollow" : "Follow")}
+
 											{!isPending && (isFollowing ? "Unfollow" : "Follow")}
 										</button>
 									</div>
@@ -121,4 +101,5 @@ const RightPanel = ({ limit = 15 }) => {
 		</div>
 	);
 };
-export default RightPanel;
+
+export default UserList;

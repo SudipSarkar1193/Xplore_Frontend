@@ -6,7 +6,7 @@ const useFollow = () => {
 	const queryClient = useQueryClient();
 
 	const { mutate: followUnfollow, isPending } = useMutation({
-		mutationFn: async (userId) => {
+		mutationFn: async (userId, authUserId) => {
 			try {
 				const res = await fetch(
 					`${backendServer}/api/v1/users/follow/${userId}`,
@@ -22,17 +22,25 @@ const useFollow = () => {
 					throw new Error(data.error || "Something went wrong!");
 				}
 
-				return { jsonRes, userId };
+				return { jsonRes, userId, authUserId };
 			} catch (error) {
 				throw error;
 			}
 		},
-		onSuccess: ({ jsonRes, userId }) => {
-			Promise.all([
-				queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
-				queryClient.invalidateQueries({ queryKey: ["userAuth"] }),
-				queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
-			]);
+		onSuccess: async ({ jsonRes, userId, authUserId}) => {
+			await queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] });
+			await queryClient.invalidateQueries({ queryKey: ["followers", userId] });
+			await queryClient.invalidateQueries({ queryKey: ["followings", userId] });
+			await queryClient.invalidateQueries({
+				queryKey: ["followers", authUserId],
+			});
+			await queryClient.invalidateQueries({
+				queryKey: ["followings", authUserId],
+			});
+			await queryClient.invalidateQueries({ queryKey: ["userAuth"] });
+			await queryClient.invalidateQueries({
+				queryKey: ["userProfile"],
+			});
 		},
 		onError: (error) => {
 			toast.error(error.message);
