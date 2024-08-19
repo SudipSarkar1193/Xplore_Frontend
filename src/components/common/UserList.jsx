@@ -23,7 +23,7 @@ const UserList = ({ limit = 15, users, isLoading }) => {
 			// Optimistically update the UI
 			let userId = id;
 			let isFollowingProfile = authUser?.following.includes(id);
-		
+
 			//If my own profile:
 			queryClient.setQueryData(["followings", authUser?._id], (oldData) =>
 				oldData?.filter((usr) =>
@@ -63,6 +63,9 @@ const UserList = ({ limit = 15, users, isLoading }) => {
 														src={user.profileImg || "/avatar-placeholder.png"}
 													/>
 												</div>
+												{user.isOnline && (
+													<div className="w-3 h-3 bg-green-600 rounded-full ring-2 ring-green-400 absolute bottom-0 right-0"></div>
+												)}
 											</div>
 											<div className="flex flex-col">
 												<span className="font-semibold tracking-tight truncate w-28">

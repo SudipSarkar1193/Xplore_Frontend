@@ -15,7 +15,7 @@ const Post = ({ post, limit = 150 }) => {
 	const [comment, setComment] = useState("");
 	const postOwner = post.authorDetails || post.author;
 
-	//console.log("postOwner", postOwner);
+	
 	const formattedDate = timeAgo(post.createdAt);
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] }); //⭐⭐
@@ -187,6 +187,9 @@ const Post = ({ post, limit = 150 }) => {
 					>
 						<img src={postOwner?.profileImg || "./avatar-placeholder.png"} />
 					</Link>
+					{postOwner.isOnline && (
+						<div className="w-3 h-3 bg-green-600 rounded-full ring-2 ring-green-400 absolute bottom-0 right-0"></div>
+					)}
 				</div>
 				<div className="flex flex-col flex-1 z-10">
 					<div className="flex gap-2 items-center">
@@ -252,7 +255,6 @@ const Post = ({ post, limit = 150 }) => {
 									{filteredComments?.length}
 								</span>
 							</div>
-							{/* We're using Modal Component from DaisyUI */}
 
 							<dialog
 								id={`comments_modal${post._id}`}

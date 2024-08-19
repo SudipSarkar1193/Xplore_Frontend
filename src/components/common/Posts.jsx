@@ -39,7 +39,7 @@ const Posts = ({ feedType, userId }) => {
 				if (!res.ok) {
 					return null;
 				}
-				// console.log("post jsonRes", jsonRes);
+		
 
 				return jsonRes.data.posts;
 			} catch (error) {

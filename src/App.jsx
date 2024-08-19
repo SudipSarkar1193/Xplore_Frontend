@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +8,7 @@ import { backendServer } from "./BackendServer";
 
 import { BackgroundPage } from "./components/BackgroundPage/BackgroundPage";
 import LoadingSpinner from "./components/common/LoadingSpinner";
-import {SearchUser} from "./components/common/SearchUser";
+import { SearchUser } from "./components/common/SearchUser";
 
 const HomePage = lazy(() => import("./pages/home/HomePage"));
 const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
@@ -22,6 +22,8 @@ const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
+	
+
 	const { data: authUser, isLoading } = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
@@ -39,6 +41,7 @@ const App = () => {
 				if (!res.ok) {
 					return null;
 				}
+				
 				return jsonRes;
 			} catch (error) {
 				throw new Error(error);
@@ -62,11 +65,17 @@ const App = () => {
 		<div className="flex justify-between max-w-6xl mx-auto ">
 			<Suspense fallback={<StyledLoadingSpinner />}>
 				<BackgroundPage />
-				{authUser && <Sidebar />}
+				{authUser && <Sidebar  />}
 				<Routes>
 					<Route
 						path="/"
-						element={authUser ? <HomePage /> : <Navigate to="/login" />}
+						element={
+							authUser ? (
+								<HomePage  />
+							) : (
+								<Navigate to="/login" />
+							)
+						}
 					/>
 					<Route
 						path="/signup"
@@ -82,7 +91,13 @@ const App = () => {
 					/>
 					<Route
 						path="/profile/:username"
-						element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+						element={
+							authUser ? (
+								<ProfilePage />
+							) : (
+								<Navigate to="/login" />
+							)
+						}
 					/>
 					<Route
 						path="/users/:id/verify/:token"

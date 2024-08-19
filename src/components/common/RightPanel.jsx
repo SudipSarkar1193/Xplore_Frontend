@@ -45,13 +45,13 @@ const RightPanel = ({ limit = 15 }) => {
 	const handleFollow = (e, user) => {
 		e.preventDefault();
 		const id = user._id;
-		
+
 		setLoadingUserId(id);
 		try {
 			followUnfollow(id, authUser?._id);
 
 			let isFollowingProfile = authUser?.following.includes(id);
-		
+
 			queryClient.setQueryData(["followings", authUser?._id], (oldData) =>
 				oldData?.filter((usr) =>
 					isFollowingProfile ? usr._id != id : [...oldData, user]
@@ -90,6 +90,9 @@ const RightPanel = ({ limit = 15 }) => {
 														src={user.profileImg || "/avatar-placeholder.png"}
 													/>
 												</div>
+												{user.isOnline && (
+													<div className="w-3 h-3 bg-green-600 rounded-full ring-2 ring-green-400 absolute bottom-0 right-0"></div>
+												)}
 											</div>
 											<div className="flex flex-col">
 												<span className="font-semibold tracking-tight truncate w-28">

@@ -52,6 +52,8 @@ const Sidebar = () => {
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["userAuth"] });
+			
+
 		},
 		onError: (error) => {
 			console.error(error.message);

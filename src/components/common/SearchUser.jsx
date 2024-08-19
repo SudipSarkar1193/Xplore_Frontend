@@ -38,13 +38,13 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
-	const handleFollow =  (e, id) => {
+	const handleFollow = (e, id) => {
 		e.preventDefault();
-		
+
 		setLoadingUserId(String(id)); // Ensure id is set as a string
 
 		try {
-			followUnfollow(id,authUser?._id);
+			followUnfollow(id, authUser?._id);
 		} catch (error) {
 			console.log("Error during follow/unfollow:", error);
 		}
@@ -82,7 +82,6 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 								)
 								?.map((user) => {
 									const isFollowing = authUser?.following.includes(user?._id);
-									
 
 									return (
 										<div
@@ -100,6 +99,9 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 																alt={user.username}
 															/>
 														</div>
+														{user.isOnline && (
+															<div className="w-3 h-3 bg-green-600 rounded-full ring-2 ring-green-400 absolute bottom-0 right-0"></div>
+														)}
 													</div>
 													<div className="flex flex-col">
 														<span className="font-semibold tracking-tight truncate w-28">
