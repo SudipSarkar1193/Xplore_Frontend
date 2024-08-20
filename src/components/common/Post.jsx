@@ -11,7 +11,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import { timeAgo } from "../../utils/timeAgo.js";
 import { backendServer } from "../../BackendServer.js";
 
-const Post = ({ post, limit = 150 }) => {
+const Post = ({ post, limit = 150 ,feedType }) => {
 	const [comment, setComment] = useState("");
 	const postOwner = post.authorDetails || post.author;
 
@@ -96,7 +96,7 @@ const Post = ({ post, limit = 150 }) => {
 			setComment("");
 
 			queryClient.setQueryData(["posts"], (oldData) => {
-				return oldData.map((p) => {
+				return oldData?.map((p) => {
 					if (p._id === post._id) {
 						return { ...p, comments };
 					}
@@ -140,19 +140,38 @@ const Post = ({ post, limit = 150 }) => {
 		onSuccess: (data) => {
 			const updatedLikes = data.data.updatedLikes;
 
-			toast.success(data.message);
-
 			// queryClient.invalidateQueries({ queryKey: ["posts"] });
 			// instead, update the cache directly for that post
 
-			queryClient.setQueryData(["posts"], (oldData) => {
-				return oldData.map((p) => {
+			// queryClient.setQueryData(["posts", "forYou"], (oldData) => {
+			// 	return oldData?.map((p) => {
+			// 		if (p._id === post._id) {
+			// 			return { ...p, likes: updatedLikes };
+			// 		}
+			// 		return p;
+			// 	});
+			// });
+
+			// queryClient.setQueryData(["posts", "following"], (oldData) => {
+			// 	return oldData?.map((p) => {
+			// 		if (p._id === post._id) {
+			// 			return { ...p, likes: updatedLikes };
+			// 		}
+			// 		return p;
+			// 	});
+			// });
+
+			queryClient.setQueryData(["posts", feedType], (oldData) => {
+				return oldData?.map((p) => {
 					if (p._id === post._id) {
 						return { ...p, likes: updatedLikes };
 					}
 					return p;
 				});
 			});
+
+
+			toast.success(data.message);
 		},
 		onError: (err) => {
 			toast.error(err.message);
@@ -161,13 +180,13 @@ const Post = ({ post, limit = 150 }) => {
 
 	const isLiked = post.likes.includes(authUser._id);
 	const isBookmarked = authUser.bookmarks.includes(post._id);
-
+	
 	const handleLikePost = () => {
 		if (isLiking) return;
 		like();
 	};
 
-	const filteredComments = post.comments.filter(
+	const filteredComments = post.comments?.filter(
 		(comment) => Object.keys(comment).length > 0
 	);
 
@@ -220,7 +239,7 @@ const Post = ({ post, limit = 150 }) => {
 
 		if (isBookmarked) {
 			queryClient.setQueryData(["posts", "bookmarks"], (oldData) => {
-				return oldData.filter((p) => p._id !== post._id); // Remove the unbookmarked post from the array
+				return oldData?.filter((p) => p._id !== post._id); // Remove the unbookmarked post from the array
 			});
 		}
 		bookmark();
@@ -400,8 +419,8 @@ const Post = ({ post, limit = 150 }) => {
 						</div>
 						<div className="flex w-1/3 justify-end gap-2 items-center ">
 							<FaRegBookmark
-								className={`w-4 h-4 text-slate-500 cursor-pointer ${
-									isBookmarked && "text-lime-600"
+								className={`w-4 h-4  cursor-pointer ${
+									isBookmarked ? "text-lime-600" : "text-slate-500"
 								} `}
 								onClick={(e) => {
 									handleBookMark(e);
