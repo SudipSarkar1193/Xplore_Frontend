@@ -25,6 +25,7 @@ const UserList = ({ limit = 15, users, isLoading }) => {
 			let isFollowingProfile = authUser?.following.includes(id);
 
 			//If my own profile:
+			if(isFollowingProfile) 
 			queryClient.setQueryData(["followings", authUser?._id], (oldData) =>
 				oldData?.filter((usr) =>
 					isFollowingProfile ? usr._id != userId : [...oldData]

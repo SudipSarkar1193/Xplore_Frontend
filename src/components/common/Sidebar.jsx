@@ -10,6 +10,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 // import { IoIosPersonAdd } from "react-icons/io";
 import { FaUserPlus } from "react-icons/fa";
+import { FaRegBookmark } from "react-icons/fa6";
 import RightPanel from "./RightPanel";
 import { backendServer } from "../../BackendServer";
 import {
@@ -66,7 +67,7 @@ const Sidebar = () => {
 	return (
 		<div>
 			<dialog id="my_modal_2" className="modal ">
-				<div className="modal-box absolute z-70 top-12">
+				<div className="modal-box absolute z-70 top-[20%]">
 					<form method="dialog">
 						{/* if there is a button in form, it will close the modal */}
 						<button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -81,10 +82,10 @@ const Sidebar = () => {
 			<div className="h-screen md:hidden z-5">
 				<div className="fixed top-1/2 z-50">
 					<CircleMenu
-						startAngle={-70}
-						rotationAngle={180}
+						startAngle={-90}
+						rotationAngle={210}
 						itemSize={2}
-						radius={7}
+						radius={6.5}
 						rotationAngleInclusive={false}
 					>
 						<CircleMenuItem>
@@ -96,6 +97,12 @@ const Sidebar = () => {
 						<CircleMenuItem>
 							<Link to={`/profile/${authUser?.username}`}>
 								<FaUser size={25} />
+							</Link>
+						</CircleMenuItem>
+
+						<CircleMenuItem>
+							<Link to={`/bookmarks`}>
+								<FaRegBookmark size={25} />
 							</Link>
 						</CircleMenuItem>
 

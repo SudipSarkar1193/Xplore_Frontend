@@ -15,7 +15,6 @@ const Post = ({ post, limit = 150 }) => {
 	const [comment, setComment] = useState("");
 	const postOwner = post.authorDetails || post.author;
 
-	
 	const formattedDate = timeAgo(post.createdAt);
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] }); //⭐⭐
@@ -161,6 +160,7 @@ const Post = ({ post, limit = 150 }) => {
 	});
 
 	const isLiked = post.likes.includes(authUser._id);
+	const isBookmarked = authUser.bookmarks.includes(post._id);
 
 	const handleLikePost = () => {
 		if (isLiking) return;
@@ -175,6 +175,55 @@ const Post = ({ post, limit = 150 }) => {
 
 	const toggleReadMore = () => {
 		setIsExpanded(!isExpanded);
+	};
+
+	const { mutate: bookmark, isPending: isBookmarking } = useMutation({
+		mutationFn: async () => {
+			try {
+				const res = await fetch(
+					`${backendServer}/api/v1/posts/bookmark/${post._id}`,
+					{
+						method: "POST",
+						credentials: "include",
+					}
+				);
+
+				if (!res.ok) {
+					throw new Error("Error bookmarking the post");
+				}
+
+				const jsonRes = await res.json();
+				return jsonRes;
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		onSuccess: (data) => {
+			const updatedBookmarkedPosts = data.data.bookmarkedPosts;
+
+			queryClient.setQueryData(["userAuth"], (oldData) => {
+				return {
+					...oldData, // Spread the existing data
+					bookmarks: updatedBookmarkedPosts, // Update only the bookmarks property
+				};
+			});
+
+			toast.success("Successfully " + data.message);
+		},
+		onError: () => {
+			toast.error("OOPs!!" + "Error while trying bookmarking");
+		},
+	});
+
+	const handleBookMark = (e) => {
+		e.preventDefault;
+
+		if (isBookmarked) {
+			queryClient.setQueryData(["posts", "bookmarks"], (oldData) => {
+				return oldData.filter((p) => p._id !== post._id); // Remove the unbookmarked post from the array
+			});
+		}
+		bookmark();
 	};
 
 	return (
@@ -329,7 +378,7 @@ const Post = ({ post, limit = 150 }) => {
 								</span>
 							</div>
 							<div
-								className="flex gap-1 items-center group cursor-pointer"
+								className="flex gap-1 items-center group cursor-pointer "
 								onClick={handleLikePost}
 							>
 								{isLiking && <LoadingSpinner size="sm" />}
@@ -337,7 +386,7 @@ const Post = ({ post, limit = 150 }) => {
 									<FaRegHeart className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-pink-500" />
 								)}
 								{isLiked && !isLiking && (
-									<FaRegHeart className="w-4 h-4 cursor-pointer text-pink-500 " />
+									<FaRegHeart className="w-4 h-4 cursor-pointer text-pink-600 " />
 								)}
 
 								<span
@@ -349,8 +398,15 @@ const Post = ({ post, limit = 150 }) => {
 								</span>
 							</div>
 						</div>
-						<div className="flex w-1/3 justify-end gap-2 items-center">
-							<FaRegBookmark className="w-4 h-4 text-slate-500 cursor-pointer" />
+						<div className="flex w-1/3 justify-end gap-2 items-center ">
+							<FaRegBookmark
+								className={`w-4 h-4 text-slate-500 cursor-pointer ${
+									isBookmarked && "text-lime-600"
+								} `}
+								onClick={(e) => {
+									handleBookMark(e);
+								}}
+							/>
 						</div>
 					</div>
 				</div>

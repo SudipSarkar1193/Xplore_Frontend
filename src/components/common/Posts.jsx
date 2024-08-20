@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { backendServer } from "../../BackendServer.js";
 
-const Posts = ({ feedType, userId }) => {
+const Posts = ({ feedType, userId, setLength }) => {
 	// const isLoading = false;
 	const endPoint = () => {
 		const r = `${backendServer}/api/v1/posts`;
@@ -14,6 +14,8 @@ const Posts = ({ feedType, userId }) => {
 				return `${r}/all`;
 			case "following":
 				return `${r}/following`;
+			case "bookmarks":
+				return `${r}/bookmarks`;
 			case "posts":
 				return `${r}/posts/${userId}`;
 			case "likes":
@@ -23,7 +25,7 @@ const Posts = ({ feedType, userId }) => {
 		}
 	};
 	const { data, isLoading, refetch, isRefetching } = useQuery({
-		queryKey: ["posts"],
+		queryKey: ["posts", feedType],
 		queryFn: async () => {
 			try {
 				const res = await fetch(endPoint(), {
@@ -39,7 +41,6 @@ const Posts = ({ feedType, userId }) => {
 				if (!res.ok) {
 					return null;
 				}
-		
 
 				return jsonRes.data.posts;
 			} catch (error) {
@@ -51,12 +52,13 @@ const Posts = ({ feedType, userId }) => {
 	//Important !!!
 	//if feed type is changed , we'd want useQuery to refetch the data
 
-	useEffect(() => {
-		refetch();
-	}, [feedType, refetch, userId]);
-
 	const posts = Array.isArray(data) ? data : [];
 
+	useEffect(() => {
+		refetch();
+
+		if (setLength) setLength(posts?.length);
+	}, [feedType, refetch, userId]);
 
 	return (
 		<div className="">

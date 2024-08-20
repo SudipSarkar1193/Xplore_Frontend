@@ -51,13 +51,13 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 	};
 
 	return (
-		<div className={`${show ? "block" : "hidden"} lg:block`}>
-			<div className={`block lg:block sticky my-4 ml-4 right:0`}>
+		<div className={`${show ? "block" : "hidden"} lg:block  h-screen`}>
+			<div className={` flex items-center justify-center ` }>
 				<div
-					className={`block lg:block bg-transparent p-4 rounded-md sticky top-2`}
+					className={`block lg:block bg-transparent p-4 rounded-md  `}
 				>
 					<div className="flex flex-col gap-4">
-						<label className="input input-bordered rounded-lg flex items-center gap-2">
+						<label className="input input-bordered border-blue-500 rounded-lg flex items-center gap-2 ">
 							<FaSearch />
 							<input
 								type="text"

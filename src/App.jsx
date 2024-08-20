@@ -16,14 +16,14 @@ const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
 const NotificationPage = lazy(() =>
 	import("./pages/notification/NotificationPage")
 );
+
+const BookmarkPage = lazy(() => import("./pages/profile/BookmarkPage"));
 const ProfilePage = lazy(() => import("./pages/profile/ProfilePage"));
 const EmailVerifyPage = lazy(() => import("./pages/auth/EmailVerifyPage"));
 const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
-	
-
 	const { data: authUser, isLoading } = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
@@ -41,7 +41,7 @@ const App = () => {
 				if (!res.ok) {
 					return null;
 				}
-				
+
 				return jsonRes;
 			} catch (error) {
 				throw new Error(error);
@@ -63,19 +63,14 @@ const App = () => {
 
 	return (
 		<div className="flex justify-between max-w-6xl mx-auto ">
+			<Toaster />
 			<Suspense fallback={<StyledLoadingSpinner />}>
 				<BackgroundPage />
-				{authUser && <Sidebar  />}
+				{authUser && <Sidebar />}
 				<Routes>
 					<Route
 						path="/"
-						element={
-							authUser ? (
-								<HomePage  />
-							) : (
-								<Navigate to="/login" />
-							)
-						}
+						element={authUser ? <HomePage /> : <Navigate to="/login" />}
 					/>
 					<Route
 						path="/signup"
@@ -91,23 +86,21 @@ const App = () => {
 					/>
 					<Route
 						path="/profile/:username"
-						element={
-							authUser ? (
-								<ProfilePage />
-							) : (
-								<Navigate to="/login" />
-							)
-						}
+						element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
 					/>
 					<Route
 						path="/users/:id/verify/:token"
 						element={<EmailVerifyPage />}
 					/>
+					<Route
+						path="/bookmarks"
+						element={authUser ? <BookmarkPage /> : <Navigate to="/login" />}
+					/>
 				</Routes>
 				{authUser && <SearchUser />}
 			</Suspense>
 
-			<Toaster />
+			
 		</div>
 	);
 };

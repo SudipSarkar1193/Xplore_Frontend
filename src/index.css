@@ -55,3 +55,8 @@
   font-weight: 400;
   font-style: normal;
 }
+
+
+#react-hot-toast {
+  z-index: 9999; /* Set a high z-index value */
+}

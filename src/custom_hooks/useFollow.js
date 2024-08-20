@@ -27,7 +27,7 @@ const useFollow = () => {
 				throw error;
 			}
 		},
-		onSuccess: async ({ jsonRes, userId, authUserId}) => {
+		onSuccess: async ({ jsonRes, userId, authUserId }) => {
 			await queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] });
 			await queryClient.invalidateQueries({ queryKey: ["followers", userId] });
 			await queryClient.invalidateQueries({ queryKey: ["followings", userId] });
@@ -40,6 +40,10 @@ const useFollow = () => {
 			await queryClient.invalidateQueries({ queryKey: ["userAuth"] });
 			await queryClient.invalidateQueries({
 				queryKey: ["userProfile"],
+			});
+
+			toast.success(jsonRes.message, {
+				position:"top-center", // You can also use "top-right" or "top-left" as per your preference
 			});
 		},
 		onError: (error) => {
