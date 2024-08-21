@@ -72,9 +72,6 @@ const App = () => {
 		},
 		onError: (err) => {
 			console.error("Error fetching user data:", err.message);
-			if (error.message.includes("Failed to fetch user authentication data")) {
-				return <Navigate to="/login" />;
-			}
 		},
 	});
 
