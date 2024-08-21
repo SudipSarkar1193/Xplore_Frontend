@@ -47,7 +47,7 @@ const App = () => {
 					credentials: "include",
 				});
 
-				console.log("res", res, " joihu", res.status);
+				console.log("res", res, " joihu", res.status===401);
 
 				if (!res.ok) {
 					console.error("DEBUG : Failed to fetch user authentication data");
