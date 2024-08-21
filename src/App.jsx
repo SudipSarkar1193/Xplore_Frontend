@@ -65,7 +65,7 @@ const App = () => {
 		<div className="flex justify-between max-w-6xl mx-auto ">
 			<Toaster />
 			<Suspense fallback={<StyledLoadingSpinner />}>
-				<BackgroundPage />
+				{!authUser && <BackgroundPage />}
 				{authUser && <Sidebar />}
 				<Routes>
 					<Route
@@ -99,8 +99,6 @@ const App = () => {
 				</Routes>
 				{authUser && <SearchUser />}
 			</Suspense>
-
-			
 		</div>
 	);
 };

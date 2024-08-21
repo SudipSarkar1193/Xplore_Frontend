@@ -141,13 +141,13 @@ const ProfilePage = () => {
 			//If i follow someone else's profile :
 			queryClient.setQueryData(["followers", userId], (oldData) => {
 				isFollowing
-					? oldData.filter((usr) => usr._id != authUser._id)
+					? oldData?.filter((usr) => usr._id != authUser._id)
 					: [...oldData, authUser];
 			});
 
 			//If my own profile:
 			queryClient.setQueryData(["followings", authUser?._id], (oldData) =>
-				oldData.filter((usr) =>
+				oldData?.filter((usr) =>
 					isFollowing ? usr._id != userId : [...oldData]
 				)
 			);
