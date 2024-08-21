@@ -48,8 +48,10 @@ const App = () => {
 				});
 
 				if (!res.ok) {
-					console.error("BEBUG : Failed to fetch user authentication data");
-					throw new Error("Failed to fetch user authentication data");
+					console.error("DEBUG : Failed to fetch user authentication data");
+					return false ;
+					
+					//throw new Error("Failed to fetch user authentication data");
 				}
 
 				const jsonRes = await res.json();
