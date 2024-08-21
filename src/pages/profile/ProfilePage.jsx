@@ -378,7 +378,7 @@ const ProfilePage = () => {
 									}
 								>
 									<span className="font-bold text-xs ">
-										{user?.followers.length}
+										{user.followers?.length}
 									</span>
 									<span className="text-slate-500 text-xs hover:text-blue-600 active:text-blue-600">
 										Followers
