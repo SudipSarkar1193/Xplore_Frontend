@@ -83,8 +83,8 @@ const NotificationPage = () => {
 					<div className="text-center p-4 font-bold">No notifications 🤔</div>
 				)}
 				{notifications?.map((notification) => (
-					<div className="border-b border-gray-700" key={notification._id}>
-						{notification.from._id != authUser?._id && (
+					<div className="border-b border-gray-700" key={notification?._id}>
+						{notification.from?._id != authUser?._id && (
 							<div className="flex gap-2 p-4">
 								{notification.type === "follow" && (
 									<FaUser className="w-7 h-7 text-primary" />
