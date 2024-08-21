@@ -1,7 +1,8 @@
-import React, { Suspense, lazy, useState } from "react";
+import React, { Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { toast, Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
+import localforage from "localforage";
 
 import "./index.css";
 import { backendServer } from "./BackendServer";
@@ -16,7 +17,6 @@ const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
 const NotificationPage = lazy(() =>
 	import("./pages/notification/NotificationPage")
 );
-
 const BookmarkPage = lazy(() => import("./pages/profile/BookmarkPage"));
 const ProfilePage = lazy(() => import("./pages/profile/ProfilePage"));
 const EmailVerifyPage = lazy(() => import("./pages/auth/EmailVerifyPage"));
@@ -24,9 +24,20 @@ const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
-	const { data: authUser, isLoading } = useQuery({
+	const {
+		data: authUser,
+		isLoading,
+		isError,
+		error,
+	} = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
+			const cachedData = await localforage.getItem("authUser");
+
+			if (cachedData) {
+				return cachedData;
+			}
+
 			try {
 				const res = await fetch(`${backendServer}/api/v1/auth/me`, {
 					method: "GET",
@@ -36,33 +47,50 @@ const App = () => {
 					credentials: "include",
 				});
 
-				const jsonRes = await res.json();
-
 				if (!res.ok) {
-					return null;
+					console.error("BEBUG : Failed to fetch user authentication data");
+					throw new Error("Failed to fetch user authentication data");
 				}
 
+				const jsonRes = await res.json();
 				return jsonRes;
 			} catch (error) {
-				throw new Error(error);
+				throw new Error(error.message);
 			}
 		},
-
-		retry: false,
+		staleTime: 1000 * 60 * 5, // 5 minutes
+		cacheTime: 1000 * 60 * 10, // 10 minutes
 		refetchOnWindowFocus: false,
+		retry: false,
+		onSuccess: async (data) => {
+			await localforage.setItem("authUser", data);
+			console.log("User data cached successfully:", data);
+		},
+		onError: (err) => {
+			console.error("Error fetching user data:", err.message);
+		},
 	});
 
 	const StyledLoadingSpinner = () => (
-		<div className="h-svh w-screen flex items-center justify-center ">
+		<div className="h-svh w-screen flex items-center justify-center">
 			<LoadingSpinner size="lg" />
 		</div>
 	);
+
 	if (isLoading) {
 		return <BackgroundPage showHeading={true} isLoading={isLoading} />;
 	}
 
+	if (isError) {
+		return (
+			<div className="error-message">
+				<p>Error: {error.message}</p>
+			</div>
+		);
+	}
+
 	return (
-		<div className="flex justify-between max-w-6xl mx-auto ">
+		<div className="flex justify-between max-w-6xl mx-auto">
 			<Toaster />
 			<Suspense fallback={<StyledLoadingSpinner />}>
 				{!authUser && <BackgroundPage />}
