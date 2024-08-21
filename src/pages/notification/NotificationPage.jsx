@@ -86,21 +86,21 @@ const NotificationPage = () => {
 					<div className="border-b border-gray-700" key={notification?._id}>
 						{notification.from?._id != authUser?._id && (
 							<div className="flex gap-2 p-4">
-								{notification.type === "follow" && (
+								{notification?.type === "follow" && (
 									<FaUser className="w-7 h-7 text-primary" />
 								)}
-								{notification.type === "like" && (
+								{notification?.type === "like" && (
 									<FaHeart className="w-7 h-7 text-red-500" />
 								)}
-								{notification.type === "comment" && (
+								{notification?.type === "comment" && (
 									<FaComment className="w-7 h-7 text-gray-600" />
 								)}
-								<Link to={`/profile/${notification.from.username}`}>
+								<Link to={`/profile/${notification?.from?.username}`}>
 									<div className="avatar">
 										<div className="w-8 rounded-full">
 											<img
 												src={
-													notification.from.profileImg ||
+													notification?.from?.profileImg ||
 													"/avatar-placeholder.png"
 												}
 											/>
@@ -108,11 +108,11 @@ const NotificationPage = () => {
 									</div>
 									<div className="flex gap-1">
 										<span className="font-bold">
-											@{notification.from.username}
+											@{notification?.from?.username}
 										</span>{" "}
-										{notification.type === "follow" && "Followed You"}
-										{notification.type === "like" && "Liked your post"}
-										{notification.type === "comment" &&
+										{notification?.type === "follow" && "Followed You"}
+										{notification?.type === "like" && "Liked your post"}
+										{notification?.type === "comment" &&
 											"commented on your post"}
 									</div>
 								</Link>
