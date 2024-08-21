@@ -8,14 +8,10 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 	const canvasRef = useRef(null);
 
 	useEffect(() => {
-		let width,
-			height,
-			ctx,
-			points,
-			target = { x: window.innerWidth / 2, y: window.innerHeight / 2 }, // Initial target position at center
-			animateHeader = true;
+		if (!largeHeaderRef.current || !canvasRef.current) return;
 
-		// Main
+		let width, height, ctx, points, target = { x: window.innerWidth / 2, y: window.innerHeight / 2 }, animateHeader = true;
+
 		initHeader();
 		initAnimation();
 		addListeners();
@@ -24,15 +20,13 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 			width = window.innerWidth;
 			height = window.innerHeight;
 
-			const largeHeader = largeHeaderRef ? largeHeaderRef.current : null;
-			if (largeHeader) largeHeader.style.height = height + "px";
+			if (largeHeaderRef.current) largeHeaderRef.current.style.height = height + "px";
 
 			const canvas = canvasRef.current;
 			canvas.width = width;
 			canvas.height = height;
 			ctx = canvas.getContext("2d");
 
-			// Create points
 			points = [];
 			for (let x = 0; x < width; x += width / 20) {
 				for (let y = 0; y < height; y += height / 20) {
@@ -43,7 +37,6 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 				}
 			}
 
-			// For each point, find the 5 closest points
 			points.forEach((p1) => {
 				const closest = [];
 				points.forEach((p2) => {
@@ -65,7 +58,6 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 				p1.closest = closest;
 			});
 
-			// Assign a circle to each point
 			points.forEach((p) => {
 				const c = new Circle(p, 2 + Math.random() * 2, "rgba(255,255,255,0.3)");
 				p.circle = c;
@@ -79,40 +71,34 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 			window.addEventListener("scroll", scrollCheck);
 			window.addEventListener("resize", resize);
 
-			// Cleanup event listeners on unmount
 			return () => {
-				window.removeEventListener("mousemove", mouseMove);
+				if (!("ontouchstart" in window)) {
+					window.removeEventListener("mousemove", mouseMove);
+				}
 				window.removeEventListener("scroll", scrollCheck);
 				window.removeEventListener("resize", resize);
 			};
 		}
 
 		function mouseMove(e) {
-			const posx =
-				e.pageX ||
-				e.clientX +
-					document.body.scrollLeft +
-					document.documentElement.scrollLeft;
-			const posy =
-				e.pageY ||
-				e.clientY +
-					document.body.scrollTop +
-					document.documentElement.scrollTop;
+			const posx = e.pageX || e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+			const posy = e.pageY || e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
 			target.x = posx;
 			target.y = posy;
 		}
 
 		function scrollCheck() {
-			// Always animate if scrolling
 			animateHeader = true;
 		}
 
 		function resize() {
 			width = window.innerWidth;
 			height = window.innerHeight;
-			if (largeHeaderRef) largeHeaderRef.current.style.height = height + "px";
-			canvasRef.current.width = width;
-			canvasRef.current.height = height;
+			if (largeHeaderRef.current) largeHeaderRef.current.style.height = height + "px";
+			if (canvasRef.current) {
+				canvasRef.current.width = width;
+				canvasRef.current.height = height;
+			}
 		}
 
 		function initAnimation() {
@@ -124,7 +110,6 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 			if (animateHeader) {
 				ctx.clearRect(0, 0, width, height);
 				points.forEach((point) => {
-					// Detect points in range
 					const distance = Math.abs(getDistance(target, point));
 					if (distance < 4000) {
 						point.active = 0.3;
@@ -195,6 +180,7 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 			<LoadingSpinner size="lg" />
 		</div>
 	);
+
 	return (
 		<div ref={largeHeaderRef} id="large-header" className="large-header">
 			<canvas ref={canvasRef} id="demo-canvas"></canvas>
