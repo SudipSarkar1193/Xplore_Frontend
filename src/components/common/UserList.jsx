@@ -32,7 +32,7 @@ const UserList = ({ limit = 15, users, isLoading }) => {
 				)
 			);
 		} catch (error) {
-			console.log("Error during follow/unfollow:", error);
+			console.error("Error during follow/unfollow:", error);
 		}
 	};
 

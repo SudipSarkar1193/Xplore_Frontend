@@ -1,8 +1,7 @@
-import React, { Suspense, lazy } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import React, { Suspense, lazy, useEffect, useState } from "react";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import localforage from "localforage";
 
 import "./index.css";
 import { backendServer } from "./BackendServer";
@@ -10,6 +9,7 @@ import { backendServer } from "./BackendServer";
 import { BackgroundPage } from "./components/BackgroundPage/BackgroundPage";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import { SearchUser } from "./components/common/SearchUser";
+// import LoginPage from "./pages/auth/LoginPage";
 
 const HomePage = lazy(() => import("./pages/home/HomePage"));
 const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
@@ -24,20 +24,11 @@ const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
-	const {
-		data: authUser,
-		isLoading,
-		isError,
-		error,
-	} = useQuery({
+	let authUser;
+
+	const { data, isLoading, isError, error, isSuccess } = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
-			const cachedData = await localforage.getItem("authUser");
-
-			if (cachedData) {
-				return cachedData;
-			}
-
 			try {
 				const res = await fetch(`${backendServer}/api/v1/auth/me`, {
 					method: "GET",
@@ -47,18 +38,18 @@ const App = () => {
 					credentials: "include",
 				});
 
-				console.log("res", res, " joihu", res.status===401);
-
 				if (!res.ok) {
+					const errorMessage = await res.text(); // Retrieve the error message from the response
 					console.error("DEBUG : Failed to fetch user authentication data");
-					return false;
 
-					//throw new Error("Failed to fetch user authentication data");
+					throw new Error(errorMessage); // Throw error to trigger onError callback
 				}
 
 				const jsonRes = await res.json();
+
 				return jsonRes;
 			} catch (error) {
+				console.error("Error fetching user data:", error.message);
 				throw new Error(error.message);
 			}
 		},
@@ -66,10 +57,6 @@ const App = () => {
 		cacheTime: 1000 * 60 * 10, // 10 minutes
 		refetchOnWindowFocus: false,
 		retry: false,
-		onSuccess: async (data) => {
-			await localforage.setItem("authUser", data);
-			console.log("User data cached successfully:", data);
-		},
 		onError: (err) => {
 			console.error("Error fetching user data:", err.message);
 		},
@@ -85,12 +72,12 @@ const App = () => {
 		return <BackgroundPage showHeading={true} isLoading={isLoading} />;
 	}
 
-	if (isError) {
-		return (
-			<div className="error-message">
-				<p>Error: {error.message}</p>
-			</div>
-		);
+	if (!isLoading) {
+		if (isError) {
+			authUser = false;
+		} else if (isSuccess) {
+			authUser = true;
+		}
 	}
 
 	return (

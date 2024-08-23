@@ -4,7 +4,7 @@ import { MdHomeFilled } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -22,6 +22,9 @@ import {SearchUser} from "./SearchUser";
 // import { IoMenu } from "react-icons/io5";
 
 const Sidebar = () => {
+
+	const navigate = useNavigate();
+
 	const queryClient = useQueryClient();
 
 	//Logout :
@@ -52,9 +55,9 @@ const Sidebar = () => {
 			}
 		},
 		onSuccess: () => {
+			
 			queryClient.invalidateQueries({ queryKey: ["userAuth"] });
 			
-
 		},
 		onError: (error) => {
 			console.error(error.message);

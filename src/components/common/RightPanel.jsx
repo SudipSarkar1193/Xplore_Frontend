@@ -32,7 +32,7 @@ const RightPanel = ({ limit = 15 }) => {
 
 				return await jsonRes.data.users;
 			} catch (error) {
-				console.log(error.message || "Error fetching suggestions");
+				console.error(error.message || "Error fetching suggestions");
 			}
 		},
 		retry: false,
@@ -58,7 +58,7 @@ const RightPanel = ({ limit = 15 }) => {
 				)
 			);
 		} catch (error) {
-			console.log("Error during follow/unfollow:", error);
+			console.error("Error during follow/unfollow:", error);
 		}
 	};
 

@@ -46,7 +46,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 		try {
 			followUnfollow(id, authUser?._id);
 		} catch (error) {
-			console.log("Error during follow/unfollow:", error);
+			console.error("Error during follow/unfollow:", error);
 		}
 	};
 
