@@ -1,5 +1,5 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import React, { Suspense, lazy, useEffect } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 
