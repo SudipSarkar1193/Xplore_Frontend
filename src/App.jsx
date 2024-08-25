@@ -9,7 +9,6 @@ import { backendServer } from "./BackendServer";
 import { BackgroundPage } from "./components/BackgroundPage/BackgroundPage";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import { SearchUser } from "./components/common/SearchUser";
-import AuthErrorPage from "./components/common/AuthErrorPage";
 // import LoginPage from "./pages/auth/LoginPage";
 
 const HomePage = lazy(() => import("./pages/home/HomePage"));
