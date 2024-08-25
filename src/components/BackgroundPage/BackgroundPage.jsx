@@ -198,7 +198,7 @@ export const BackgroundPage = ({ showHeading = false, isLoading = false }) => {
 						<StyledLoadingSpinner />
 
 						<div className="open-sans-medium w-full text-orange-300 hover:animate-bounce active:animate-bounce ">
-							Created By : Sudip Sarkar
+							Developed By : Sudip Sarkar
 						</div>
 					</>
 				)}
