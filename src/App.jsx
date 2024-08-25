@@ -24,15 +24,9 @@ const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
-	//let authUser;
-	console.log("hiey");
-	const {
-		data: authUser,
-		isLoading,
-		isError,
-		error,
-		isSuccess,
-	} = useQuery({
+	let authUser;
+	
+	const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
 			try {
@@ -78,7 +72,10 @@ const App = () => {
 		return <BackgroundPage showHeading={true} isLoading={isLoading} />;
 	}
 
+	if (isSuccess) authUser = true;
 	if (isError) {
+
+		authUser = false;
 		<Navigate to="/login" />;
 	}
 
@@ -94,8 +91,14 @@ const App = () => {
 						element={authUser ? <HomePage /> : <Navigate to="/login" />}
 					/>
 
-					<Route path="/signup"  element={!authUser ?<RegisterPage />:<Navigate to="/" />} />
-					<Route path="/login" element={!authUser ?<LoginPage />:<Navigate to="/" />} />
+					<Route
+						path="/signup"
+						element={!authUser ? <RegisterPage /> : <Navigate to="/" />}
+					/>
+					<Route
+						path="/login"
+						element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+					/>
 
 					<Route
 						path="/notifications"
@@ -106,7 +109,7 @@ const App = () => {
 						path="/profile/:username"
 						element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
 					/>
-					
+
 					<Route
 						path="/users/:id/verify/:token"
 						element={<EmailVerifyPage />}
