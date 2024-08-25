@@ -13,7 +13,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 	const queryClient = useQueryClient();
 	const [loadingUserId, setLoadingUserId] = useState(null);
 
-	const { data: users, isLoading } = useQuery({
+	const { data: users, isLoading} = useQuery({
 		queryKey: ["users"],
 		queryFn: async () => {
 			const res = await fetch(`${backendServer}/api/v1/users/getusers/users`, {
@@ -33,6 +33,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 		},
 		retry: false,
 	});
+	
 
 	const { followUnfollow, isPending } = useFollow();
 

@@ -9,6 +9,7 @@ import { backendServer } from "./BackendServer";
 import { BackgroundPage } from "./components/BackgroundPage/BackgroundPage";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import { SearchUser } from "./components/common/SearchUser";
+import AuthErrorPage from "./components/common/AuthErrorPage";
 // import LoginPage from "./pages/auth/LoginPage";
 
 const HomePage = lazy(() => import("./pages/home/HomePage"));
@@ -24,9 +25,15 @@ const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
-	let authUser;
-
-	const { data, isLoading, isError, error, isSuccess } = useQuery({
+	//let authUser;
+	console.log("hiey");
+	const {
+		data: authUser,
+		isLoading,
+		isError,
+		error,
+		isSuccess,
+	} = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
 			try {
@@ -72,12 +79,8 @@ const App = () => {
 		return <BackgroundPage showHeading={true} isLoading={isLoading} />;
 	}
 
-	if (!isLoading) {
-		if (isError) {
-			authUser = false;
-		} else if (isSuccess) {
-			authUser = true;
-		}
+	if (isError) {
+		<Navigate to="/login" />;
 	}
 
 	return (
@@ -91,26 +94,25 @@ const App = () => {
 						path="/"
 						element={authUser ? <HomePage /> : <Navigate to="/login" />}
 					/>
-					<Route
-						path="/signup"
-						element={!authUser ? <RegisterPage /> : <Navigate to="/" />}
-					/>
-					<Route
-						path="/login"
-						element={!authUser ? <LoginPage /> : <Navigate to="/" />}
-					/>
+
+					<Route path="/signup" element={<RegisterPage />} />
+					<Route path="/login" element={<LoginPage />} />
+
 					<Route
 						path="/notifications"
 						element={authUser ? <NotificationPage /> : <Navigate to="/login" />}
 					/>
+
 					<Route
 						path="/profile/:username"
 						element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
 					/>
+					
 					<Route
 						path="/users/:id/verify/:token"
 						element={<EmailVerifyPage />}
 					/>
+
 					<Route
 						path="/bookmarks"
 						element={authUser ? <BookmarkPage /> : <Navigate to="/login" />}

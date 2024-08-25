@@ -51,7 +51,7 @@ const Posts = ({ feedType, userId, setLength }) => {
 
 	//Important !!!
 	//if feed type is changed , we'd want useQuery to refetch the data
-
+	
 	const posts = Array.isArray(data) ? data : [];
 
 	useEffect(() => {

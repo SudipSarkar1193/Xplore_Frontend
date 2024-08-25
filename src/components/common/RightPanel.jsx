@@ -10,7 +10,7 @@ import { IoIosPersonAdd } from "react-icons/io";
 const RightPanel = ({ limit = 15 }) => {
 	const [loadingUserId, setLoadingUserId] = useState(null);
 	const queryClient = useQueryClient();
-	const { data: suggestedUsers, isLoading } = useQuery({
+	const { data: suggestedUsers, isLoading  } = useQuery({
 		queryKey: ["suggestedUsers"],
 		queryFn: async () => {
 			try {
@@ -37,6 +37,8 @@ const RightPanel = ({ limit = 15 }) => {
 		},
 		retry: false,
 	});
+
+	
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
