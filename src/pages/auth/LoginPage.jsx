@@ -70,7 +70,7 @@ const LoginPage = () => {
 			toast.success(jsonRes.message);
 			queryClient.invalidateQueries({ queryKey: ["userAuth"] });
 			queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] });
-			return <Navigate to="/" />;
+			<Navigate to="/" />;
 		},
 		onError: (error) => {
 			console.error(error.message);
@@ -122,7 +122,7 @@ const LoginPage = () => {
 			toast.success(jsonRes.message);
 			queryClient.invalidateQueries({ queryKey: ["userAuth"] });
 			queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] });
-			return <Navigate to="/" />;
+			<Navigate to="/" />;
 		},
 		onError: (error) => {
 			toast.error(`Error: ${error.message}`);
