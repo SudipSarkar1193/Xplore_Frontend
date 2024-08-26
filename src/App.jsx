@@ -64,11 +64,11 @@ const App = () => {
 		return <BackgroundPage showHeading={true} />;
 	}
 
-	console.log(error.message);
 	let authUser = null;
 
 	if (
 		isError &&
+		error &&
 		error.message === "Unauthorized access Request" &&
 		error.error === "Unauthorized access Request"
 	) {
