@@ -61,7 +61,7 @@ const UserList = ({ limit = 15, users, isLoading }) => {
 											<div className="avatar">
 												<div className="w-8 rounded-full">
 													<img
-														src={user.profileImg || "/avatar-placeholder.png"}
+														src={user.profileImg}
 													/>
 												</div>
 												{user.isOnline && (

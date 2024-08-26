@@ -91,8 +91,7 @@ const App = () => {
 							<Route path="/notifications" element={<NotificationPage />} />
 							<Route path="/profile/:username" element={<ProfilePage />} />
 							<Route path="/bookmarks" element={<BookmarkPage />} />
-							<Route path="/error" element={<ErrorPage />} />
-							<Route path="*" element={<Navigate to="/error" />} />
+							<Route path="*" element={<Navigate to="/" />} />
 						</Routes>
 						<SearchUser />
 					</>
@@ -108,8 +107,8 @@ const App = () => {
 								path="/users/:id/verify/:token"
 								element={<EmailVerifyPage />}
 							/>
-							<Route path="/error" element={<ErrorPage />} />
-							<Route path="*" element={<Navigate to="/error" />} />
+
+							<Route path="*" element={<Navigate to="/" />} />
 						</Routes>
 					</>
 				)}

@@ -11,7 +11,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import { timeAgo } from "../../utils/timeAgo.js";
 import { backendServer } from "../../BackendServer.js";
 
-const Post = ({ post, limit = 150 ,feedType }) => {
+const Post = ({ post, limit = 150, feedType }) => {
 	const [comment, setComment] = useState("");
 	const postOwner = post.authorDetails || post.author;
 
@@ -170,7 +170,6 @@ const Post = ({ post, limit = 150 ,feedType }) => {
 				});
 			});
 
-
 			toast.success(data.message);
 		},
 		onError: (err) => {
@@ -180,7 +179,7 @@ const Post = ({ post, limit = 150 ,feedType }) => {
 
 	const isLiked = post.likes.includes(authUser._id);
 	const isBookmarked = authUser.bookmarks.includes(post._id);
-	
+
 	const handleLikePost = () => {
 		if (isLiking) return;
 		like();
@@ -253,7 +252,7 @@ const Post = ({ post, limit = 150 ,feedType }) => {
 						to={`/profile/${postOwner?.username}`}
 						className="w-8 rounded-full overflow-hidden"
 					>
-						<img src={postOwner?.profileImg || "./avatar-placeholder.png"} />
+						<img src={postOwner?.profileImg} />
 					</Link>
 					{postOwner.isOnline && (
 						<div className="w-3 h-3 bg-green-600 rounded-full ring-2 ring-green-400 absolute bottom-0 right-0"></div>
@@ -340,12 +339,7 @@ const Post = ({ post, limit = 150 ,feedType }) => {
 											<div key={comment._id} className="flex gap-2 items-start">
 												<div className="avatar">
 													<div className="w-8 rounded-full">
-														<img
-															src={
-																comment.authorDetails?.profileImg ||
-																"/avatar-placeholder.png"
-															}
-														/>
+														<img src={comment.authorDetails?.profileImg} />
 													</div>
 												</div>
 												<div className="flex flex-col">

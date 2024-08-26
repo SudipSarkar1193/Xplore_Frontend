@@ -13,7 +13,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 	const queryClient = useQueryClient();
 	const [loadingUserId, setLoadingUserId] = useState(null);
 
-	const { data: users, isLoading} = useQuery({
+	const { data: users, isLoading } = useQuery({
 		queryKey: ["users"],
 		queryFn: async () => {
 			const res = await fetch(`${backendServer}/api/v1/users/getusers/users`, {
@@ -33,7 +33,6 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 		},
 		retry: false,
 	});
-	
 
 	const { followUnfollow, isPending } = useFollow();
 
@@ -53,10 +52,8 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 
 	return (
 		<div className={`${show ? "block" : "hidden"} lg:block  h-screen`}>
-			<div className={` flex items-center justify-center ` }>
-				<div
-					className={`block lg:block bg-transparent p-4 rounded-md  `}
-				>
+			<div className={` flex items-center justify-center `}>
+				<div className={`block lg:block bg-transparent p-4 rounded-md  `}>
 					<div className="flex flex-col gap-4">
 						<label className="input input-bordered border-blue-500 rounded-lg flex items-center gap-2 ">
 							<FaSearch />
@@ -93,12 +90,7 @@ export const SearchUser = ({ show = false, limit = 15 }) => {
 												<div className="flex gap-2 items-center">
 													<div className="avatar">
 														<div className="w-8 rounded-full">
-															<img
-																src={
-																	user.profileImg || "/avatar-placeholder.png"
-																}
-																alt={user.username}
-															/>
+															<img src={user.profileImg} alt={user.username} />
 														</div>
 														{user.isOnline && (
 															<div className="w-3 h-3 bg-green-600 rounded-full ring-2 ring-green-400 absolute bottom-0 right-0"></div>
