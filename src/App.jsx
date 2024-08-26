@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
@@ -9,7 +9,8 @@ import { backendServer } from "./BackendServer";
 import { BackgroundPage } from "./components/BackgroundPage/BackgroundPage";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import { SearchUser } from "./components/common/SearchUser";
-// import LoginPage from "./pages/auth/LoginPage";
+
+const ErrorPage = lazy(() => import("./pages/error/ErrorPage"));
 
 const HomePage = lazy(() => import("./pages/home/HomePage"));
 const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
@@ -24,42 +25,28 @@ const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
-	let authUser;
-	
-	const { data, isLoading, isError, error, isSuccess, refetch } = useQuery({
+	const { data, isLoading, isError } = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
-			try {
-				const res = await fetch(`${backendServer}/api/v1/auth/me`, {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					credentials: "include",
-				});
+			const res = await fetch(`${backendServer}/api/v1/auth/me`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+			});
 
-				if (!res.ok) {
-					const errorMessage = await res.text(); // Retrieve the error message from the response
-					console.error("DEBUG : Failed to fetch user authentication data");
-
-					throw new Error(errorMessage); // Throw error to trigger onError callback
-				}
-
-				const jsonRes = await res.json();
-
-				return jsonRes;
-			} catch (error) {
-				console.error("Error fetching user data:", error.message);
-				throw new Error(error.message);
+			if (!res.ok) {
+				const errorMessage = await res.text();
+				throw new Error(errorMessage);
 			}
+
+			const jsonRes = await res.json();
+			return jsonRes;
 		},
-		staleTime: 1000 * 60 * 5, // 5 minutes
-		cacheTime: 1000 * 60 * 10, // 10 minutes
+		cacheTime: 1000 * 60 * 10,
 		refetchOnWindowFocus: false,
 		retry: false,
-		onError: (err) => {
-			console.error("Error fetching user data:", err.message);
-		},
 	});
 
 	const StyledLoadingSpinner = () => (
@@ -69,58 +56,52 @@ const App = () => {
 	);
 
 	if (isLoading) {
-		return <BackgroundPage showHeading={true} isLoading={isLoading} />;
+		return <BackgroundPage showHeading={true} />;
 	}
 
-	if (isSuccess) authUser = true;
-	if (isError) {
+	const authUser = !isError;
 
-		authUser = false;
-		<Navigate to="/login" />;
-	}
+
+	
 
 	return (
 		<div className="flex justify-between max-w-6xl mx-auto">
 			<Toaster />
 			<Suspense fallback={<StyledLoadingSpinner />}>
-				{!authUser && <BackgroundPage />}
-				{authUser && <Sidebar />}
-				<Routes>
-					<Route
-						path="/"
-						element={authUser ? <HomePage /> : <Navigate to="/login" />}
-					/>
+				{authUser === true && (
+					<>
+						<Sidebar />
+						<Routes>
+							<Route path="/" element={<HomePage />} />
+							<Route path="/login" element={<Navigate to="/" />} />
 
-					<Route
-						path="/signup"
-						element={!authUser ? <RegisterPage /> : <Navigate to="/" />}
-					/>
-					<Route
-						path="/login"
-						element={!authUser ? <LoginPage /> : <Navigate to="/" />}
-					/>
+							<Route path="/notifications" element={<NotificationPage />} />
+							<Route path="/profile/:username" element={<ProfilePage />} />
+							<Route path="/bookmarks" element={<BookmarkPage />} />
+							<Route path="/error" element={<ErrorPage />} />
+							<Route path="*" element={<Navigate to="/error" />} />
+						</Routes>
+						<SearchUser />
+					</>
+				)}
+				{authUser === false && (
+					<>
+						<BackgroundPage />
+						<Routes>
+							<Route path="/" element={<Navigate to="/login" />} />
+							<Route path="/login" element={<LoginPage />} />
+							<Route path="/signup" element={<RegisterPage />} />
+							<Route
+								path="/users/:id/verify/:token"
+								element={<EmailVerifyPage />}
+							/>
+							<Route path="/error" element={<ErrorPage />} />
+							<Route path="*" element={<Navigate to="/error" />} />
+						</Routes>
+					</>
+				)}
 
-					<Route
-						path="/notifications"
-						element={authUser ? <NotificationPage /> : <Navigate to="/login" />}
-					/>
-
-					<Route
-						path="/profile/:username"
-						element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
-					/>
-
-					<Route
-						path="/users/:id/verify/:token"
-						element={<EmailVerifyPage />}
-					/>
-
-					<Route
-						path="/bookmarks"
-						element={authUser ? <BookmarkPage /> : <Navigate to="/login" />}
-					/>
-				</Routes>
-				{authUser && <SearchUser />}
+				{authUser === null || (authUser === undefined && <ErrorPage />)}
 			</Suspense>
 		</div>
 	);
