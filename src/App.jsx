@@ -25,7 +25,7 @@ const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
-	const { data, isLoading, isError } = useQuery({
+	const { data, isLoading, isError, error } = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
 			const res = await fetch(`${backendServer}/api/v1/auth/me`, {
@@ -37,8 +37,13 @@ const App = () => {
 			});
 
 			if (!res.ok) {
-				const errorMessage = await res.text();
-				throw new Error(errorMessage);
+				// const errorMessage = await res.text();
+				// throw new Error(errorMessage)
+
+				const errorText = await res.text(); // Get the error as text
+				const errorJsonString = errorText.replace("Error: ", ""); // Remove the 'Error: ' part
+				const errorMessage = JSON.parse(errorJsonString); // Parse the JSON string
+				throw errorMessage; // Throw the error as a JSON object
 			}
 
 			const jsonRes = await res.json();
@@ -59,10 +64,18 @@ const App = () => {
 		return <BackgroundPage showHeading={true} />;
 	}
 
-	const authUser = !isError;
+	console.log(error.message);
+	let authUser = null;
 
-
-	
+	if (
+		isError &&
+		error.message === "Unauthorized access Request" &&
+		error.error === "Unauthorized access Request"
+	) {
+		authUser = false;
+	} else if (!isError && error === null) {
+		authUser = true;
+	}
 
 	return (
 		<div className="flex justify-between max-w-6xl mx-auto">
@@ -101,7 +114,7 @@ const App = () => {
 					</>
 				)}
 
-				{authUser === null || (authUser === undefined && <ErrorPage />)}
+				{(authUser === null || authUser === undefined) && <ErrorPage />}
 			</Suspense>
 		</div>
 	);
