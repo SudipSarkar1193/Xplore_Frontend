@@ -330,19 +330,23 @@ const ProfilePage = () => {
 								<span className="text-sm my-1">{user?.bio}</span>
 							</div>
 
-							<div className="flex gap-2 flex-wrap">
+							<div className="flex gap-2 flex-wrap ">
 								{user?.link && (
-									<div className="flex gap-1 items-center ">
+									<div
+										className="flex gap-1 items-center "
+										onClick={() => {
+											// Validate and format the URL
+											const formattedLink = /^https?:\/\//i.test(user?.link)
+											  ? user?.link
+											  : `https://${user?.link}`;
+											  
+											window.open(formattedLink, '_blank');
+										  }}
+									>
 										<>
 											<FaLink className="w-3 h-3 text-slate-500" />
-											<a
-												href="https://youtube.com/@asaprogrammer_"
-												target="_blank"
-												rel="noreferrer"
-												className="text-sm text-blue-500 hover:underline"
-											>
-												{user?.link}
-											</a>
+
+											{user?.link}
 										</>
 									</div>
 								)}
