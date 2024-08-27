@@ -113,7 +113,7 @@ const App = () => {
 					</>
 				)}
 
-				{(authUser === null || authUser === undefined) && <ErrorPage />}
+				{/* {(authUser === null || authUser === undefined) && <ErrorPage />} */}
 			</Suspense>
 		</div>
 	);
