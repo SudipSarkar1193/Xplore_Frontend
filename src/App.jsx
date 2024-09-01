@@ -25,7 +25,12 @@ const Sidebar = lazy(() => import("./components/common/Sidebar"));
 const RightPanel = lazy(() => import("./components/common/RightPanel"));
 
 const App = () => {
-	const { data, isLoading, isError, error } = useQuery({
+	let {
+		data: authUser,
+		isLoading,
+		isError,
+		error,
+	} = useQuery({
 		queryKey: ["userAuth"],
 		queryFn: async () => {
 			const res = await fetch(`${backendServer}/api/v1/auth/me`, {
@@ -64,24 +69,13 @@ const App = () => {
 		return <BackgroundPage showHeading={true} />;
 	}
 
-	let authUser = null;
-
-	if (
-		isError &&
-		error &&
-		error.message === "Unauthorized access Request" &&
-		error.error === "Unauthorized access Request"
-	) {
-		authUser = false;
-	} else if (!isError && error === null) {
-		authUser = true;
-	}
+	
 
 	return (
 		<div className="flex justify-between max-w-6xl mx-auto">
 			<Toaster />
 			<Suspense fallback={<StyledLoadingSpinner />}>
-				{authUser === true && (
+				{authUser && (
 					<>
 						<Sidebar />
 						<Routes>
@@ -96,7 +90,7 @@ const App = () => {
 						<SearchUser />
 					</>
 				)}
-				{authUser === false && (
+				{authUser === false || isError && (
 					<>
 						<BackgroundPage />
 						<Routes>
@@ -113,7 +107,7 @@ const App = () => {
 					</>
 				)}
 
-				{/* {(authUser === null || authUser === undefined) && <ErrorPage />} */}
+				
 			</Suspense>
 		</div>
 	);
