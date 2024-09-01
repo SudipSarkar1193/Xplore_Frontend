@@ -29,6 +29,7 @@ const App = () => {
 		data: authUser,
 		isLoading,
 		isError,
+		isSuccess,
 		error,
 	} = useQuery({
 		queryKey: ["userAuth"],
@@ -69,13 +70,11 @@ const App = () => {
 		return <BackgroundPage showHeading={true} />;
 	}
 
-	
-
 	return (
 		<div className="flex justify-between max-w-6xl mx-auto">
 			<Toaster />
 			<Suspense fallback={<StyledLoadingSpinner />}>
-				{authUser && (
+				{authUser && isSuccess && (
 					<>
 						<Sidebar />
 						<Routes>
@@ -90,7 +89,7 @@ const App = () => {
 						<SearchUser />
 					</>
 				)}
-				{authUser === false || isError && (
+				{(!authUser || isError) && (
 					<>
 						<BackgroundPage />
 						<Routes>
@@ -106,8 +105,6 @@ const App = () => {
 						</Routes>
 					</>
 				)}
-
-				
 			</Suspense>
 		</div>
 	);
