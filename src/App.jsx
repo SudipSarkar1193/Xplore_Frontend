@@ -101,7 +101,7 @@ const App = () => {
 								element={<EmailVerifyPage />}
 							/>
 
-							<Route path="*" element={<Navigate to="/" />} />
+							<Route path="*" element={<ErrorPage />} />
 						</Routes>
 					</>
 				)}
