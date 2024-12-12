@@ -122,7 +122,7 @@ const ProfilePage = () => {
 
 	useEffect(() => {
 		userProfileRefecth();
-	}, [username, userProfileRefecth, user, followers, followings]);
+	}, [username, user, followers, followings]);
 
 	const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
